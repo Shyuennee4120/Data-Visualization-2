@@ -1,0 +1,211 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Car-driver commuting by age and sex",
+    "subtitle": "Share of employed people within each age-and-sex group, Census day 2021"
+  },
+
+  "width": 500,
+  "height": 380,
+
+  "data": {
+    "url": "../data/commuting_by_age_sex.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+
+  "transform": [
+    {
+      "filter": "datum.Sex === 'Males' || datum.Sex === 'Females'"
+    },
+    {
+      "fold": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years"
+      ],
+      "as": ["Age_raw", "People"]
+    },
+    {
+      "calculate": "datum.Age_raw === '75 years' ? '75 years and over' : datum.Age_raw",
+      "as": "Age_group"
+    },
+    {
+      "calculate": "toNumber(datum.People)",
+      "as": "People_count"
+    },
+    {
+      "calculate": "datum.Vehicles === 'Total' ? datum.People_count : null",
+      "as": "Total_value"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "Total_value",
+          "as": "Group_total"
+        }
+      ],
+      "groupby": ["Sex", "Age_group"]
+    },
+    {
+      "filter": "datum.Vehicles === 'Car, as driver' && datum.Group_total > 0"
+    },
+    {
+      "calculate": "datum.People_count / datum.Group_total",
+      "as": "Driver_share"
+    },
+    {
+      "pivot": "Sex",
+      "value": "Driver_share",
+      "groupby": ["Age_group"]
+    },
+    {
+      "calculate": "100 * (datum.Males - datum.Females)",
+      "as": "Gap_percentage_points"
+    }
+  ],
+
+  "encoding": {
+    "y": {
+      "field": "Age_group",
+      "type": "ordinal",
+      "sort": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years and over"
+      ],
+      "title": "Age group",
+      "axis": {
+        "labelLimit": 180
+      }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#aaaaaa",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "Males",
+          "type": "quantitative",
+          "title": "Car-driver share of employed people",
+          "scale": {
+            "domain": [0, 1]
+          },
+          "axis": {
+            "format": ".0%"
+          }
+        },
+        "x2": {
+          "field": "Females"
+        },
+        "tooltip": [
+          {
+            "field": "Age_group",
+            "type": "ordinal",
+            "title": "Age group"
+          },
+          {
+            "field": "Males",
+            "type": "quantitative",
+            "title": "Male car-driver share",
+            "format": ".1%"
+          },
+          {
+            "field": "Females",
+            "type": "quantitative",
+            "title": "Female car-driver share",
+            "format": ".1%"
+          },
+          {
+            "field": "Gap_percentage_points",
+            "type": "quantitative",
+            "title": "Male minus female (percentage points)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "Males",
+            "Females"
+          ],
+          "as": ["Sex", "Share"]
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 110,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "Share",
+          "type": "quantitative",
+          "title": "Car-driver share of employed people",
+          "scale": {
+            "domain": [0, 1]
+          },
+          "axis": {
+            "format": ".0%"
+          }
+        },
+        "color": {
+          "field": "Sex",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Males", "Females"],
+            "range": ["#2878b5", "#d97732"]
+          },
+          "legend": {
+            "title": "Sex",
+            "orient": "bottom"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Age_group",
+            "type": "ordinal",
+            "title": "Age group"
+          },
+          {
+            "field": "Sex",
+            "type": "nominal"
+          },
+          {
+            "field": "Share",
+            "type": "quantitative",
+            "title": "Car-driver share",
+            "format": ".1%"
+          }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

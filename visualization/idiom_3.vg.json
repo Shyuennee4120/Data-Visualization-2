@@ -1,0 +1,115 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Car-driver commuting by state",
+    "subtitle": "Share of employed people, Census day 2021"
+  },
+  "width": 400,
+  "height": 500,
+
+  "data": {
+    "url": "../data/state_commuting.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+
+  "transform": [
+    {
+      "fold": [
+        "New South Wales",
+        "Victoria",
+        "Queensland",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australian Capital Territory"
+      ],
+      "as": ["State", "People"]
+    },
+    {
+      "filter": "datum.Vehicles === 'Car, as driver' || datum.Vehicles === 'Total'"
+    },
+    {
+      "calculate": "toNumber(datum.People)",
+      "as": "People_count"
+    },
+    {
+      "pivot": "Vehicles",
+      "value": "People_count",
+      "groupby": ["State"]
+    },
+    {
+      "calculate": "datum['Car, as driver'] / datum.Total",
+      "as": "Car_driver_share"
+    },
+    {
+      "lookup": "State",
+      "from": {
+        "data": {
+          "url": "aus_state.geojson",
+          "format": {
+            "type": "json",
+            "property": "features"
+          }
+        },
+        "key": "properties.STATE_NAME"
+      },
+      "as": "Boundary"
+    }
+  ],
+
+  "projection": {
+    "type": "equalEarth"
+  },
+
+  "mark": {
+    "type": "geoshape",
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "shape": {
+      "field": "Boundary",
+      "type": "geojson"
+    },
+    "color": {
+      "field": "Car_driver_share",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "blues"
+      },
+      "legend": {
+        "title": "Car-driver share",
+        "format": ".0%"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "State",
+        "type": "nominal",
+        "title": "State / territory"
+      },
+      {
+        "field": "Car, as driver",
+        "type": "quantitative",
+        "title": "Car drivers",
+        "format": ",.0f"
+      },
+      {
+        "field": "Total",
+        "type": "quantitative",
+        "title": "Employed people",
+        "format": ",.0f"
+      },
+      {
+        "field": "Car_driver_share",
+        "type": "quantitative",
+        "title": "Car-driver share",
+        "format": ".1%"
+      }
+    ]
+  }
+}

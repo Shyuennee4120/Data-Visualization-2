@@ -1,0 +1,122 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Long-term change in passenger travel",
+    "subtitle": "1974-75 versus 2024-25"
+  },
+  "width": 450,
+  "height": 400,
+  "padding": {
+    "left": 15,
+    "right": 180,
+    "top": 20,
+    "bottom": 15
+  },
+
+  "data": {
+    "url": "../data/national_passenger_travel.csv"
+  },
+
+  "transform": [
+    {
+      "filter": "datum['Financial year'] === '1974-75' || datum['Financial year'] === '2024-25'"
+    },
+    {
+      "fold": [
+        "Passenger cars",
+        "Buses",
+        "Rail",
+        "Air",
+        "Other "
+      ],
+      "as": ["Mode", "Passenger_km"]
+    },
+    {
+      "calculate": "toNumber(datum.Passenger_km)",
+      "as": "Travel"
+    },
+    {
+      "calculate": "trim(datum.Mode) + ': ' + format(datum.Travel, '.1f')",
+      "as": "End_label"
+    }
+  ],
+
+  "encoding": {
+    "x": {
+      "field": "Financial year",
+      "type": "ordinal",
+      "sort": ["1974-75", "2024-25"],
+      "title": null,
+      "axis": {
+        "labelAngle": 0,
+        "labelPadding": 10
+      }
+    },
+    "y": {
+      "field": "Travel",
+      "type": "quantitative",
+      "title": "Passenger travel (billion passenger km)",
+      "scale": {"zero": true}
+    },
+    "color": {
+      "field": "Mode",
+      "type": "nominal",
+      "legend": {
+        "title": "Transport mode",
+        "orient": "bottom"
+      }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5,
+        "point": {
+          "filled": true,
+          "size": 70
+        }
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "Mode",
+            "type": "nominal"
+          },
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Travel",
+            "type": "quantitative",
+            "title": "Billion passenger km",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum['Financial year'] === '2024-25'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 10,
+        "dy": {
+          "expr": "datum.Mode === 'Buses' ? -8 : datum.Mode === 'Rail' ? 8 : 0"
+        },
+        "fontSize": 12
+      },
+      "encoding": {
+        "text": {
+          "field": "End_label"
+        }
+      }
+    }
+  ]
+}

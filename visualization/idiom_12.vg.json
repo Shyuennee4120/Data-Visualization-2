@@ -1,0 +1,202 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
+  "title": {
+    "text": "Driving versus riding as a car passenger",
+    "subtitle": "Share of employed people within each age group, Census day 2021"
+  },
+
+  "width": 480,
+  "height": 350,
+
+  "data": {
+    "url": "../data/commuting_by_age_sex.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+
+  "transform": [
+    {
+      "filter": "datum.Sex === 'Persons'"
+    },
+    {
+      "fold": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years"
+      ],
+      "as": ["Age_raw", "People"]
+    },
+    {
+      "calculate": "datum.Age_raw === '75 years' ? '75 years and over' : datum.Age_raw",
+      "as": "Age_group"
+    },
+    {
+      "calculate": "toNumber(datum.People)",
+      "as": "People_count"
+    },
+    {
+      "calculate": "datum.Vehicles === 'Total' ? datum.People_count : null",
+      "as": "Total_value"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "Total_value",
+          "as": "Group_total"
+        }
+      ],
+      "groupby": ["Age_group"]
+    },
+    {
+      "filter": "(datum.Vehicles === 'Car, as driver' || datum.Vehicles === 'Car, as passenger') && datum.Group_total > 0"
+    },
+    {
+      "calculate": "datum.People_count / datum.Group_total",
+      "as": "Mode_share"
+    },
+    {
+      "calculate": "datum.Vehicles === 'Car, as driver' ? -datum.Mode_share : datum.Mode_share",
+      "as": "Signed_share"
+    },
+    {
+      "calculate": "datum.Vehicles === 'Car, as driver' ? 'Car driver' : 'Car passenger'",
+      "as": "Travel_method"
+    }
+  ],
+
+  "encoding": {
+    "y": {
+      "field": "Age_group",
+      "type": "ordinal",
+      "sort": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years and over"
+      ],
+      "title": "Age group",
+      "axis": {
+        "labelLimit": 180
+      }
+    },
+
+    "x": {
+      "field": "Signed_share",
+      "type": "quantitative",
+      "title": "Car driver ← Share of employed people → Car passenger",
+      "scale": {
+        "domain": [-0.7, 0.7]
+      },
+      "axis": {
+        "values": [-0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6],
+        "labelExpr": "format(abs(datum.value), '.0%')"
+      }
+    }
+  },
+
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 28
+      },
+      "encoding": {
+        "color": {
+          "field": "Travel_method",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Car driver", "Car passenger"],
+            "range": ["#2878b5", "#d97732"]
+          },
+          "legend": {
+            "title": "Travel method",
+            "orient": "bottom"
+          }
+        },
+
+        "tooltip": [
+          {
+            "field": "Age_group",
+            "type": "ordinal",
+            "title": "Age group"
+          },
+          {
+            "field": "Travel_method",
+            "type": "nominal",
+            "title": "Travel method"
+          },
+          {
+            "field": "People_count",
+            "type": "quantitative",
+            "title": "People",
+            "format": ",.0f"
+          },
+          {
+            "field": "Mode_share",
+            "type": "quantitative",
+            "title": "Share of employed people",
+            "format": ".1%"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "color": "#333333",
+        "align": {
+          "expr": "datum.Signed_share < 0 ? 'right' : 'left'"
+        },
+        "dx": {
+          "expr": "datum.Signed_share < 0 ? -6 : 6"
+        }
+      },
+      "encoding": {
+        "text": {
+          "field": "Mode_share",
+          "type": "quantitative",
+          "format": ".1%"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [{}]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#777777",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative"
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 380
+        }
+      }
+    }
+  ],
+
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Travel-to-work methods by state",
+    "subtitle": [
+      "Share of all employed people, Census day 2021",
+      "Square-root colour scale highlights differences in smaller shares"
+    ]
+  },
+  "width": 400,
+  "height": 420,
+
+  "data": {
+    "url": "../data/state_commuting.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+
+  "transform": [
+    {
+      "fold": [
+        "New South Wales",
+        "Victoria",
+        "Queensland",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australian Capital Territory"
+      ],
+      "as": ["State", "People"]
+    },
+    {
+      "calculate": "datum.People == null || datum.People === '' ? null : toNumber(datum.People)",
+      "as": "People_count"
+    },
+    {
+      "calculate": "datum.Vehicles === 'Total' ? datum.People_count : null",
+      "as": "Total_value"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "Total_value",
+          "as": "Employed_total"
+        }
+      ],
+      "groupby": ["State"]
+    },
+    {
+      "filter": "indexof(['Total', 'Worked at home', 'Did not go to work', 'Not stated'], datum.Vehicles) < 0"
+    },
+    {
+      "filter": "isValid(datum.People_count) && datum.Employed_total > 0"
+    },
+    {
+      "calculate": "datum.People_count / datum.Employed_total",
+      "as": "Mode_share"
+    }
+  ],
+
+  "mark": {
+    "type": "rect",
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "x": {
+      "field": "State",
+      "type": "nominal",
+      "sort": [
+        "New South Wales",
+        "Victoria",
+        "Queensland",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australian Capital Territory"
+      ],
+      "title": null,
+      "axis": {
+        "labelAngle": -45,
+        "labelLimit": 230,
+        "labelFontSize": 12
+      }
+    },
+
+    "y": {
+      "field": "Vehicles",
+      "type": "nominal",
+      "sort": [
+        "Car, as driver",
+        "Car, as passenger",
+        "Train",
+        "Bus",
+        "Tram/light rail",
+        "Ferry",
+        "Taxi/ride-share service",
+        "Truck",
+        "Motorbike/scooter",
+        "Bicycle",
+        "Walked only",
+        "Other Mode"
+      ],
+      "title": "Travel method",
+      "axis": {
+        "labelLimit": 220,
+        "labelFontSize": 12
+      }
+    },
+
+    "color": {
+      "field": "Mode_share",
+      "type": "quantitative",
+      "scale": {
+        "type": "sqrt",
+        "scheme": "yellowgreenblue",
+        "zero": true
+      },
+      "legend": {
+        "title": "Share of employed people",
+        "format": ".1%",
+        "values": [
+          0,
+          0.01,
+          0.05,
+          0.10,
+          0.30,
+          0.60
+        ],
+        "gradientLength": 250,
+        "titleLimit": 220
+      }
+    },
+
+    "tooltip": [
+      {
+        "field": "State",
+        "type": "nominal",
+        "title": "State / territory"
+      },
+      {
+        "field": "Vehicles",
+        "type": "nominal",
+        "title": "Travel method"
+      },
+      {
+        "field": "People_count",
+        "type": "quantitative",
+        "title": "People",
+        "format": ",.0f"
+      },
+      {
+        "field": "Employed_total",
+        "type": "quantitative",
+        "title": "All employed people",
+        "format": ",.0f"
+      },
+      {
+        "field": "Mode_share",
+        "type": "quantitative",
+        "title": "Share of employed people",
+        "format": ".2%"
+      }
+    ]
+  },
+
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

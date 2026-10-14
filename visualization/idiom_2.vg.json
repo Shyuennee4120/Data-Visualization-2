@@ -1,0 +1,71 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Road travel by vehicle type",
+  "width": 500,
+  "height": 300,
+
+  "data": {
+    "url": "../data/vehicle_travel_by_type.csv"
+  },
+
+  "transform": [
+    {
+      "fold": [
+        "Passenger cars",
+        "Motor cycles",
+        "Buses",
+        "Light commercial vehicles",
+        "Rigid and other trucks",
+        "Articulated trucks"
+      ],
+      "as": ["Vehicle_type", "Vehicle_km"]
+    }
+  ],
+
+  "mark": "area",
+
+  "encoding": {
+    "x": {
+      "field": "Financial year",
+      "type": "ordinal",
+      "sort": "ascending",
+      "title": "Financial year",
+      "axis": {
+        "labelAngle": -45,
+        "labelOverlap": true
+      }
+    },
+    "y": {
+      "field": "Vehicle_km",
+      "type": "quantitative",
+      "stack": "center",
+      "title": null,
+      "axis": null
+    },
+    "color": {
+      "field": "Vehicle_type",
+      "type": "nominal",
+      "legend": {
+        "title": "Vehicle type",
+        "orient": "bottom"
+  }
+    },
+    "tooltip": [
+      {
+        "field": "Financial year",
+        "type": "ordinal"
+      },
+      {
+        "field": "Vehicle_type",
+        "type": "nominal",
+        "title": "Vehicle type"
+      },
+      {
+        "field": "Vehicle_km",
+        "type": "quantitative",
+        "title": "Billion vehicle km",
+        "format": ".2f"
+      }
+    ]
+  }
+}

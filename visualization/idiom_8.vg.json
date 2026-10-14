@@ -1,0 +1,164 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Annual road-travel growth by state",
+    "subtitle": "Each point represents one financial year's change"
+  },
+  "width": 550,
+  "height": 400,
+
+  "data": {
+    "url": "../data/state_vehicle_travel.csv"
+  },
+
+  "transform": [
+    {
+      "fold": [
+        "New South Wales",
+        "Victoria",
+        "Queensland",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australia Capital Territory"
+      ],
+      "as": ["State", "Vehicle_km"]
+    },
+    {
+      "calculate": "datum.Vehicle_km == null || datum.Vehicle_km === '' ? null : toNumber(datum.Vehicle_km)",
+      "as": "Travel"
+    },
+    {
+      "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
+      "as": "Year_start"
+    },
+    {
+      "calculate": "datum.State === 'New South Wales' ? 'NSW' : datum.State === 'Victoria' ? 'VIC' : datum.State === 'Queensland' ? 'QLD' : datum.State === 'South Australia' ? 'SA' : datum.State === 'Western Australia' ? 'WA' : datum.State === 'Tasmania' ? 'TAS' : datum.State === 'Northern Territory' ? 'NT' : 'ACT'",
+      "as": "State_code"
+    },
+    {
+      "window": [
+        {
+          "op": "lag",
+          "field": "Travel",
+          "as": "Previous_travel"
+        },
+        {
+          "op": "lag",
+          "field": "Year_start",
+          "as": "Previous_year"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Year_start",
+          "order": "ascending"
+        }
+      ],
+      "groupby": ["State"]
+    },
+    {
+      "filter": "isValid(datum.Travel) && isValid(datum.Previous_travel) && datum.Previous_travel > 0 && datum.Year_start - datum.Previous_year === 1"
+    },
+    {
+      "calculate": "100 * (datum.Travel / datum.Previous_travel - 1)",
+      "as": "Annual_growth_pct"
+    }
+  ],
+
+  "layer": [
+    {
+      "data": {
+        "values": [{}]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#777777",
+        "strokeDash": [4, 4]
+      },
+      "encoding": {
+        "y": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "boxplot",
+        "extent": 1.5,
+        "outliers": false,
+        "size": 35
+      },
+      "encoding": {
+        "x": {
+          "field": "State",
+          "type": "nominal",
+          "sort": ["New South Wales",
+          "Victoria",
+          "Queensland",
+          "South Australia",
+          "Western Australia",
+          "Tasmania",
+          "Northern Territory",
+          "Australia Capital Territory"],
+          "title": "State / territory",
+          "axis": {"labelAngle": -45}
+        },
+        "y": {
+          "field": "Annual_growth_pct",
+          "type": "quantitative",
+          "title": "Annual change in vehicle kilometres (%)"
+        },
+        "color": {
+          "value": "#9ecae1"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 35,
+        "opacity": 0.45,
+        "color": "#245a81"
+      },
+      "encoding": {
+        "x": {
+          "field": "State",
+          "type": "nominal",
+          "sort": ["New South Wales", "Victoria", "Queesland", "Southern Australia", "Western Australia", "Tasmania", "Northen Territory", "Australia Capital Territory"],
+          "title": "State / territory",
+          "axis": {"labelAngle": 0}
+        },
+        "y": {
+          "field": "Annual_growth_pct",
+          "type": "quantitative",
+          "title": "Annual change in vehicle kilometres (%)"
+        },
+        "tooltip": [
+          {
+            "field": "State",
+            "type": "nominal"
+          },
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Travel",
+            "type": "quantitative",
+            "title": "Billion vehicle km",
+            "format": ".2f"
+          },
+          {
+            "field": "Annual_growth_pct",
+            "type": "quantitative",
+            "title": "Annual growth (%)",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ]
+}

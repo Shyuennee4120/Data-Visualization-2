@@ -1,0 +1,120 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Transport mode rankings over time",
+    "subtitle": "Ranked by national passenger kilometres, 1974-75 to 2024-25"
+  },
+  "width": 500,
+  "height": 350,
+
+  "data": {
+    "url": "../data/national_passenger_travel.csv"
+  },
+
+  "transform": [
+    {
+      "fold": [
+        "Passenger cars",
+        "Buses",
+        "Rail",
+        "Air",
+        "Other "
+      ],
+      "as": ["Mode", "Passenger_km"]
+    },
+    {
+      "calculate": "toNumber(datum.Passenger_km)",
+      "as": "Travel"
+    },
+    {
+      "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
+      "as": "Year_start"
+    },
+    {
+      "window": [
+        {
+          "op": "rank",
+          "as": "Rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Travel",
+          "order": "descending"
+        }
+      ],
+      "groupby": ["Financial year"]
+    }
+  ],
+
+  "mark": {
+    "type": "line",
+    "strokeWidth": 2.5,
+    "point": {
+      "filled": true,
+      "size": 35
+    }
+  },
+
+  "encoding": {
+    "x": {
+      "field": "Year_start",
+      "type": "quantitative",
+      "title": "Financial year starting",
+      "scale": {
+        "zero": false
+      },
+      "axis": {
+        "format": "d",
+        "tickCount": 10
+      }
+    },
+    "y": {
+      "field": "Rank",
+      "type": "quantitative",
+      "title": "Rank by passenger travel",
+      "scale": {
+        "domain": [1, 5],
+        "reverse": true,
+        "zero": false
+      },
+      "axis": {
+        "values": [1, 2, 3, 4, 5],
+        "format": "d"
+      }
+    },
+    "color": {
+      "field": "Mode",
+      "type": "nominal",
+      "legend": {
+        "title": "Transport mode",
+        "orient": "bottom"
+      }
+    },
+    "order": {
+      "field": "Year_start",
+      "type": "quantitative"
+    },
+    "tooltip": [
+      {
+        "field": "Financial year",
+        "type": "ordinal"
+      },
+      {
+        "field": "Mode",
+        "type": "nominal"
+      },
+      {
+        "field": "Rank",
+        "type": "quantitative",
+        "format": "d"
+      },
+      {
+        "field": "Travel",
+        "type": "quantitative",
+        "title": "Billion passenger km",
+        "format": ".2f"
+      }
+    ]
+  }
+}

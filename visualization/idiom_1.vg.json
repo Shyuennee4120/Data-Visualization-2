@@ -1,0 +1,59 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "National passenger travel by transport mode",
+  "width": 450,
+  "height": 300,
+  "data": {
+    "url": "../data/national_passenger_travel.csv"
+  },
+  "transform": [
+    {
+      "fold": ["Passenger cars", "Buses", "Rail", "Air", "Other "],
+      "as": ["Mode", "Passenger_km"]
+    }
+  ],
+
+  "mark": {
+    "type": "line",
+    "tooltip": true
+  },
+
+  "encoding": {
+    "x": {
+      "field": "Financial year",
+      "type": "ordinal",
+      "sort": "ascending",
+      "title": "Financial year",
+      "axis": {
+        "labelAngle": -45,
+        "labelOverlap": true
+      }
+    },
+    "y": {
+      "field": "Passenger_km",
+      "type": "quantitative",
+      "title": "Passenger travel (billion passenger km)"
+    },
+    "color": {
+      "field": "Mode",
+      "type": "nominal",
+      "title": "Transport mode"
+    },
+    "tooltip": [
+      {
+        "field": "Financial year",
+        "type": "ordinal"
+      },
+      {
+        "field": "Mode",
+        "type": "nominal"
+      },
+      {
+        "field": "Passenger_km",
+        "type": "quantitative",
+        "title": "Billion passenger km",
+        "format": ".2f"
+      }
+    ]
+  }
+}

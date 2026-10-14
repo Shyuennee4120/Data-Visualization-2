@@ -1,0 +1,185 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Inter-capital car passenger travel",
+    "subtitle": "2024-25, thousand passenger movements"
+  },
+  "width": 450,
+  "height": 400,
+
+  "projection": {"type": "equalEarth"},
+
+  "layer": [
+    {
+      "data": {
+        "url": "aus_state.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eeeeee",
+        "stroke": "white"
+      }
+    },
+    {
+      "data": {
+        "url": "../data/intercapital_car_travel.csv"
+      },
+
+      "transform": [
+        {
+          "filter": "datum['Financial year'] === '2023-24'"
+        },
+        {
+          "fold": [
+            "Sydney - Melbourne",
+            "Sydney - Canberra",
+            "Sydney - Brisbane",
+            "Melbourne - Adelaide",
+            "Melbourne - Brisbane",
+            "Sydney - Adelaide"
+          ],
+          "as": ["Corridor", "Movements"]
+        },
+        {
+          "calculate": "trim(split(datum.Corridor, '-')[0])",
+          "as": "City1"
+        },
+        {
+          "calculate": "trim(split(datum.Corridor, '-')[1])",
+          "as": "City2"
+        },
+        {
+          "calculate": "toNumber(datum.Movements)",
+          "as": "Car_movements_thousand"
+        },
+        {
+          "lookup": "City1",
+          "from": {
+            "data": {
+              "url": "../data/city_coordinates.csv"
+            },
+            "key": "City",
+            "fields": ["latitude", "longitude"]
+          },
+          "as": ["Latitude1", "Longitude1"]
+        },
+        {
+          "lookup": "City2",
+          "from": {
+            "data": {
+              "url": "../data/city_coordinates.csv"
+            },
+            "key": "City",
+            "fields": ["latitude", "longitude"]
+          },
+          "as": ["Latitude2", "Longitude2"]
+        }
+      ],
+
+      "mark": {
+        "type": "rule",
+        "color": "#2878b5",
+        "opacity": 0.65
+      },
+
+      "encoding": {
+        "longitude": {
+          "field": "Longitude1",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "Latitude1",
+          "type": "quantitative"
+        },
+        "longitude2": {"field": "Longitude2"},
+        "latitude2": {"field": "Latitude2"},
+
+        "size": {
+          "field": "Car_movements_thousand",
+          "type": "quantitative",
+          "scale": {
+            "zero": true,
+            "range": [0, 18]
+          },
+          "legend": {
+            "title": "Movements (thousands)"
+          }
+        },
+
+        "tooltip": [
+          {
+            "field": "City1",
+            "type": "nominal",
+            "title": "City 1"
+          },
+          {
+            "field": "City2",
+            "type": "nominal",
+            "title": "City 2"
+          },
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Car_movements_thousand",
+            "type": "quantitative",
+            "title": "Car movements (thousands)",
+            "format": ",.1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "../data/city_coordinates.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Sydney', 'Melbourne', 'Canberra', 'Brisbane', 'Adelaide'], datum.City) >= 0"
+        }
+      ],
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "size": 65,
+            "color": "#333333"
+          },
+          "encoding": {
+            "tooltip": {
+              "field": "City",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 7,
+            "dy": -7,
+            "fontSize": 11
+          },
+          "encoding": {
+            "text": {"field": "City"}
+          }
+        }
+      ]
+    }
+  ]
+}

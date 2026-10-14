@@ -1,0 +1,115 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Capital-city car passenger travel",
+    "subtitle": "1976-77 to 2024-25 • Slider selects the financial year's starting year"
+  },
+  "width": 650,
+  "height": 450,
+
+  "params": [
+    {
+      "name": "Year_selection",
+      "value": 2024,
+      "bind": {
+        "input": "range",
+        "min": 1976,
+        "max": 2024,
+        "step": 1,
+        "name": "Financial year starting: "
+      }
+    }
+  ],
+
+  "projection": {
+    "type": "equalEarth"
+  },
+
+  "layer": [
+    {
+      "data": {
+        "url": "aus_state.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eeeeee",
+        "stroke": "white"
+      }
+    },
+    {
+      "data": {
+        "url": "../data/capital_city_passenger_travel.csv"
+      },
+
+      "transform": [
+        {
+          "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
+          "as": "Year_start"
+        },
+        {
+          "filter": "datum.Year_start === Year_selection"
+        },
+        {
+          "lookup": "City",
+          "from": {
+            "data": {
+              "url": "../data/city_coordinates.csv"
+            },
+            "key": "City",
+            "fields": ["latitude", "longitude"]
+          }
+        }
+      ],
+
+      "mark": {
+        "type": "circle",
+        "color": "#2878b5",
+        "opacity": 0.7,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "Passenger cars",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 60],
+            "range": [0, 2000]
+          },
+          "legend": {
+            "title": "Billion passenger km"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "City",
+            "type": "nominal"
+          },
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Passenger cars",
+            "type": "quantitative",
+            "title": "Car travel (billion passenger km)",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ]
+}
