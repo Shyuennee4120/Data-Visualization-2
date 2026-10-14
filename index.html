@@ -10,11 +10,12 @@
     <title>Australia on the Road</title>
     <!-- Styles: css/style.css. Chart loading: js/main.js. -->
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/chart-layout.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   </head>
-  <body>
+  <body id="top">
     <div class="page">
       <header class="hero">
         <p class="eyebrow">Road Passenger Travel Across Australia</p>
@@ -28,10 +29,7 @@
           transport choices vary by age and sex, and how household vehicle
           ownership differs across dwelling types.
         </p>
-        <p class="reader-guide">
-          Hover over charts for details. Use the available year controls to
-          explore change over time.
-        </p>
+        <p class="author">Presented by: Chen Shyuen Nee Date: 14 Oct 2026</p>
       </header>
       <nav class="section-nav" aria-label="Story sections">
         <a href="#network">01 Network</a>
@@ -57,60 +55,108 @@
             </div>
           </header>
           <p class="section-intro">
-            Start with national passenger travel, then explore how different
-            vehicle types contribute to road use.
+            Explore national passenger travel and how different vehicle types
+            contribute to road use.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
+
+          <figure class="chart-card" aria-labelledby="chart-1-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 1</span>
               <h3 id="chart-1-heading">National passenger travel by mode</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom1"
-                class="chart"
-                aria-label="National passenger travel by mode">
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_1.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom1"
+                    class="chart"
+                    aria-label="National passenger travel by mode"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_1.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Cars remain central to passenger travel</h4>
+                <p>
+                  Passenger cars account for the largest volume of passenger
+                  travel throughout the period, remaining well above the other
+                  transport modes.
+                </p>
+                <p>
+                  Air travel grows substantially over the longer term, while the
+                  <strong>sharp downturn</strong> around COVID interrupts that
+                  growth. The subsequent recovery differs between transport
+                  modes.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong>
+                  Cars <strong>remain dominant</strong> despite changes in the
+                  wider transport network.
                 </p>
               </div>
             </div>
-            <figcaption>Measure: billion passenger kilometres.</figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
+
+            <figcaption class="chart-reminder">
+              Measure: billion passenger kilometres.
+            </figcaption>
+          </figure>
+
           <figure class="chart-card" aria-labelledby="chart-2-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 2</span>
               <h3 id="chart-2-heading">Road travel by vehicle type</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom2"
-                class="chart"
-                aria-label="Road travel by vehicle type"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_2.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom2"
+                    class="chart"
+                    aria-label="Road travel by vehicle type"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_2.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Passenger cars are the largest component of road travel</h4>
+                <p>
+                  Passenger cars remain the largest component of vehicle
+                  kilometres travelled.&#x20; Commercial vehicles also
+                  contribute substantially to road use, showing that&#x20;
+                  Australia's road network supports both personal mobility and
+                  commercial activity.&#x20; The streamgraph reveals changes in
+                  the overall volume and composition of vehicle travel.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong>
+                  Cars <strong>remain dominant</strong> despite changes in the
+                  wider transport network.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Measure: billion vehicle kilometres. Includes commercial vehicles.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+        <hr>
         <section
           class="story-section"
           id="geography"
@@ -129,94 +175,144 @@
             Compare state commuting shares, capital-city car travel and the six
             measured inter-capital car corridors.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
           <figure class="chart-card" aria-labelledby="chart-3-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 3</span>
               <h3 id="chart-3-heading">Car-driver commuting by state</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom3"
-                class="chart"
-                aria-label="Car-driver commuting by state"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_3.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom3"
+                    class="chart"
+                    aria-label="Car-driver commuting by state"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_3.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Measure: car-driver share of all employed people. Census day 2021.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+
           <figure class="chart-card" aria-labelledby="chart-4-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 4</span>
               <h3 id="chart-4-heading">Capital-city car passenger travel</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom4"
-                class="chart"
-                aria-label="Capital-city car passenger travel"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_4.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom4"
+                    class="chart"
+                    aria-label="Capital-city car passenger travel"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_4.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Measure: passenger-car travel in billion passenger kilometres. Use
               the available year control.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+          
           <figure class="chart-card" aria-labelledby="chart-5-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 5</span>
               <h3 id="chart-5-heading">Inter-capital car passenger travel</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom5"
-                class="chart"
-                aria-label="Inter-capital car passenger travel"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_5.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom5"
+                    class="chart"
+                    aria-label="Inter-capital car passenger travel"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_5.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Measure: thousand car passenger movements. Links are undirected
               city-pair connections, not actual road routes.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+        
+        <hr>
+        
         <section
           class="story-section"
           id="change"
-          aria-labelledby="change-heading"
-        >
+          aria-labelledby="change-heading">
           <header class="section-heading">
             <span class="section-number">03</span>
             <div>
@@ -231,90 +327,141 @@
             Compare the first and latest years, follow changes in modal
             rankings, and examine variation in annual road-travel growth.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
           <figure class="chart-card" aria-labelledby="chart-6-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 6</span>
               <h3 id="chart-6-heading">Long-term passenger-travel change</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom6"
-                class="chart"
-                aria-label="Long-term passenger-travel change"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_6.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom6"
+                    class="chart"
+                    aria-label="Long-term passenger-travel change"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_6.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Comparison: 1974–75 and 2024–25. Values are actual passenger
               kilometres, not an index.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+
           <figure class="chart-card" aria-labelledby="chart-7-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 7</span>
               <h3 id="chart-7-heading">Transport mode rankings over time</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom7"
-                class="chart"
-                aria-label="Transport mode rankings over time"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_7.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom7"
+                    class="chart"
+                    aria-label="Transport mode rankings over time"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_7.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Rank 1 indicates the mode with the greatest passenger travel. Rank
               changes do not show the size of volume differences.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+
           <figure class="chart-card" aria-labelledby="chart-8-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 8</span>
               <h3 id="chart-8-heading">Annual road-travel growth by state</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom8"
-                class="chart"
-                aria-label="Annual road-travel growth by state"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_8.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom8"
+                    class="chart"
+                    aria-label="Annual road-travel growth by state"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_8.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Each point represents one consecutive-year percentage change in
               all-vehicle road travel.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+
+        <hr>
+
         <section
           class="story-section"
           id="profiles"
@@ -336,65 +483,99 @@
             passenger travel. These charts use different populations and
             measures.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
+
           <figure class="chart-card" aria-labelledby="chart-9-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 9</span>
               <h3 id="chart-9-heading">Travel-to-work methods by state</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom9"
-                class="chart"
-                aria-label="Travel-to-work methods by state"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_9.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom9"
+                    class="chart"
+                    aria-label="Travel-to-work methods by state"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_9.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Shares use all employed people as the denominator. Colour uses a
               square-root scale; omitted non-travel statuses mean displayed
               shares do not sum to 100%.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+
           <figure class="chart-card" aria-labelledby="chart-10-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 10</span>
               <h3 id="chart-10-heading">Capital-city transport profiles</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom10"
-                class="chart"
-                aria-label="Capital-city transport profiles"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_10.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom10"
+                    class="chart"
+                    aria-label="Capital-city transport profiles"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_10.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Each line represents a city. All mode axes use a shared percentage
               scale.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+
+        <hr>
+
         <section
           class="story-section"
           id="people"
@@ -413,36 +594,50 @@
             Compare male and female driving shares within age groups, then
             compare driving with travelling as a car passenger.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
+
           <figure class="chart-card" aria-labelledby="chart-11-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 11</span>
               <h3 id="chart-11-heading">Car-driver commuting by age and sex</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom11"
-                class="chart"
-                aria-label="Car-driver commuting by age and sex"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_11.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom11"
+                    class="chart"
+                    aria-label="Car-driver commuting by age and sex"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_11.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Each percentage uses its own age-and-sex employed-person total.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
+
           <figure class="chart-card" aria-labelledby="chart-12-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 12</span>
@@ -450,28 +645,48 @@
                 Driving versus riding as a passenger
               </h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom12"
-                class="chart"
-                aria-label="Driving versus riding as a passenger"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_12.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom12"
+                    class="chart"
+                    aria-label="Driving versus riding as a passenger"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_12.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Both sides use the same age-group denominator. Negative plotting
               values only place driver bars on the left.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+
+        <hr>
+
         <section
           class="story-section"
           id="access"
@@ -490,41 +705,59 @@
             Compare vehicle-ownership composition across dwelling types using
             four waffle panels.
           </p>
-          <!-- Replace this placeholder with a finding supported by your chart results. -->
-          <p class="story-placeholder">
-            <strong>Your story:</strong> Add a short section takeaway here after
-            reviewing the charts.
-          </p>
+
           <figure class="chart-card" aria-labelledby="chart-13-heading">
             <header class="chart-heading">
               <span class="chart-number">Chart 13</span>
               <h3 id="chart-13-heading">Vehicle ownership by dwelling type</h3>
             </header>
-            <div class="chart-scroll">
-              <div
-                id="idiom13"
-                class="chart"
-                aria-label="Vehicle ownership by dwelling type"
-              >
-                <p class="chart-status">
-                  Chart placeholder — loading visualization/idiom_13.vg.json…
+
+            <div class="chart-story-layout">
+              <!-- LEFT: chart plus its caption. Keep the chart ID unchanged. -->
+              <div class="chart-column">
+                <div class="chart-scroll">
+                  <div
+                    id="idiom13"
+                    class="chart"
+                    aria-label="Vehicle ownership by dwelling type"
+                  >
+                    <p class="chart-status">
+                      Loading visualization/idiom_13.vg.json…
+                    </p>
+                  </div>
+                </div>
+                <!-- The caption is positioned beneath the chart by CSS. -->
+              </div>
+
+              <!-- RIGHT: replace the placeholder text with your chart story. -->
+              <div class="chart-story">
+                <h4>Your key finding</h4>
+                <p>
+                  Add your chart-specific story here: describe the pattern,
+                  include a supporting value or comparison, and explain its
+                  significance.
+                </p>
+                <p class="story-takeaway">
+                  <strong>Key takeaway:</strong> Add one sentence summarising
+                  what readers should remember.
                 </p>
               </div>
             </div>
-            <figcaption>
+
+            <figcaption class="chart-reminder">
               Each square represents approximately 1% within a dwelling type.
               Equal panel sizes compare composition, not dwelling counts.
             </figcaption>
-            <!-- Replace this text with your observation, supporting comparison and its interpretation. -->
-            <p class="finding-placeholder">
-              <strong>Insight placeholder:</strong> Add the key pattern, a
-              supporting value or comparison, and what it means.
-            </p>
           </figure>
         </section>
+
+        <hr>
+
+        <h2>Conclusion</h2>
+
         <section class="closing" aria-labelledby="closing-heading">
           <h2 id="closing-heading">
-            What do these patterns reveal about Australia’s reliance on cars?
+            What do these patterns reveal about Australia's reliance on cars?
           </h2>
           <!-- Write this after analysing the completed charts; do not treat the prompt as a conclusion. -->
           <p class="finding-placeholder">
@@ -533,6 +766,7 @@
             demographic differences.
           </p>
         </section>
+
         <section class="method-notes" aria-labelledby="notes-heading">
           <h2 id="notes-heading">Reading the measures</h2>
           <ul>
@@ -562,6 +796,7 @@
             </li>
           </ul>
         </section>
+
         <section class="method-notes" aria-labelledby="sources-heading">
           <h2 id="sources-heading">Sources and credits</h2>
           <p>
@@ -577,14 +812,7 @@
       </main>
       <footer>
         Australia on the Road · Data visualization project ·
-        <a
-          href="#top"
-          onclick="
-            window.scrollTo({ top: 0, behavior: 'auto' });
-            return false;
-          "
-          >Back to top</a
-        >
+        <a href="#top">Back to top</a>
       </footer>
     </div>
     <noscript

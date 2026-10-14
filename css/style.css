@@ -47,6 +47,7 @@ a {
 
 h1 {
   font-size: clamp(34px, 5vw, 60px);
+  font-family: Georgia, 'Times New Roman', Times, serif;
   line-height: 1.1;
   letter-spacing: -.04em;
   margin: 14px 0;
@@ -63,8 +64,8 @@ h1 {
   font-size: 18px;
 }
 
-.reader-guide {
-  font-size: 14px;
+.author {
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -107,6 +108,7 @@ h1 {
 
 h2 {
   font-size: 29px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   line-height: 1.25;
   margin: 0 0 8px;
   letter-spacing: -.02em;
@@ -142,6 +144,7 @@ h2 {
 }
 
 h3 {
+  font-family: Georgia, 'Times New Roman', Times, serif;
   margin: 3px 0 0;
   font-size: 20px;
   line-height: 1.4;
@@ -154,6 +157,25 @@ h3 {
 
 .chart {
   min-height: 160px;
+}
+
+/* Remove card styling around charts. */
+.chart-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 32px 0;
+}
+
+/* Let the page background show through chart containers. */
+.chart,
+.chart-scroll,
+.vega-embed,
+.vega-embed canvas,
+.vega-embed svg {
+  background: transparent;
 }
 
 .chart-status {
@@ -259,21 +281,61 @@ a:focus-visible {
   }
 }
 
-/* Remove card styling around charts. */
+/* Keep the chart section free of card styling. */
 .chart-card {
   background: transparent;
   border: none;
   border-radius: 0;
   box-shadow: none;
   padding: 0;
-  margin: 32px 0;
+  margin: 36px 0 56px;
 }
 
-/* Let the page background show through chart containers. */
-.chart,
-.chart-scroll,
-.vega-embed,
-.vega-embed canvas,
-.vega-embed svg {
-  background: transparent;
+/* Left: chart. Right: storytelling. */
+.chart-story-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Allow wide charts to scroll without covering the story. */
+.chart-story-layout .chart-scroll {
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.chart-story {
+  padding-top: 35px;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.chart-story h4 {
+  margin: 0 0 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 23px;
+  line-height: 1.3;
+}
+
+.chart-story p {
+  margin: 0 0 18px;
+}
+
+.story-takeaway {
+  border-left: 3px solid var(--accent, #16716b);
+  padding-left: 14px;
+}
+
+/* Stack the story below the chart on smaller screens. */
+@media (max-width: 1100px) {
+  .chart-story-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .chart-story {
+    padding-top: 0;
+    max-width: 750px;
+  }
 }

@@ -20,7 +20,7 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#eeeeee",
+        "fill": "#9a9a9a",
         "stroke": "white"
       }
     },
