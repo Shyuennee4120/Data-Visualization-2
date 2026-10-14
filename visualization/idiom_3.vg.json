@@ -66,6 +66,7 @@
 
   "mark": {
     "type": "geoshape",
+    "color": "#547690",
     "stroke": "white",
     "strokeWidth": 1
   },

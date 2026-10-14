@@ -36,7 +36,7 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#eeeeee",
+        "fill": "#919395",
         "stroke": "white"
       }
     },
