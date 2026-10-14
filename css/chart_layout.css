@@ -51,6 +51,7 @@
 .chart-story h4 {
   margin: 0 0 16px;
   font-size: 22px;
+  font-display: var(--accent, #26938c);
   line-height: 1.35;
 }
 
