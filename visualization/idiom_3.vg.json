@@ -4,7 +4,7 @@
     "text": "Car-driver commuting by state",
     "subtitle": "Share of employed people, Census day 2021"
   },
-  "width": 400,
+  "width": 500,
   "height": 500,
 
   "data": {
@@ -61,7 +61,7 @@
   ],
 
   "projection": {
-    "type": "equalEarth"
+    "type": "mercator"
   },
 
   "mark": {

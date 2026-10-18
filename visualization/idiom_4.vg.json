@@ -22,7 +22,7 @@
   ],
 
   "projection": {
-    "type": "equalEarth"
+    "type": "mercator"
   },
 
   "layer": [

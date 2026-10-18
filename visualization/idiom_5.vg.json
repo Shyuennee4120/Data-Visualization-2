@@ -7,7 +7,7 @@
   "width": 450,
   "height": 400,
 
-  "projection": {"type": "equalEarth"},
+  "projection": {"type": "mercator"},
 
   "layer": [
     {
