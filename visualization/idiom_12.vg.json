@@ -1,11 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "title": {
-    "text": "Driving versus riding as a car passenger",
-    "subtitle": "Share of employed people within each age group, Census day 2021"
-  },
-
   "width": 480,
   "height": 350,
 
@@ -192,11 +187,5 @@
         }
       }
     }
-  ],
-
-  "config": {
-    "view": {
-      "stroke": null
-    }
-  }
+  ]
 }

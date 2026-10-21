@@ -1,13 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "title": {
-    "text": "Capital-city transport profiles",
-    "subtitle": "Each line represents a city; values are shares of motorised passenger kilometres"
-  },
-
-  "width": 500,
-  "height": 500,
+  "width": 400,
+  "height": 400,
 
   "data": {
     "url": "../data/capital_city_passenger_travel.csv",
@@ -101,7 +96,7 @@
         "labelLimit": 180,
         "grid": true,
         "gridColor": "#dddddd",
-        "tickSize": 0
+        "tickSize": 1
       }
     },
 
@@ -175,11 +170,5 @@
         "format": ".2%"
       }
     ]
-  },
-
-  "config": {
-    "view": {
-      "stroke": null
-    }
   }
 }

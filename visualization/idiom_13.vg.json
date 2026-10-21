@@ -1,14 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "title": {
-    "text": "Vehicle ownership by dwelling type",
-    "subtitle": [
-      "Census 2021: each square represents approximately 1%",
-      "Squares are rounded; tooltips show exact percentages"
-    ]
-  },
-
   "data": {
     "url": "../data/dwelling_vehicle_ownership.csv",
     "format": {"type": "csv"}
@@ -263,12 +255,6 @@
   "resolve": {
     "scale": {
       "color": "shared"
-    }
-  },
-
-  "config": {
-    "view": {
-      "stroke": null
     }
   }
 }

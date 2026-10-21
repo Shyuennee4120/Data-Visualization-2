@@ -1,9 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Transport mode rankings over time",
-    "subtitle": "Ranked by national passenger kilometres, 1974-75 to 2024-25"
-  },
+  "title": "Ranked by national passenger kilometres, 1974-75 to 2024-25",
   "width": 500,
   "height": 350,
 

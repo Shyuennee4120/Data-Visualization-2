@@ -1,6 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "National passenger travel by transport mode",
   "width": 450,
   "height": 300,
   "data": {

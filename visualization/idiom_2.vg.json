@@ -1,6 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": "Road travel by vehicle type",
   "width": 500,
   "height": 300,
 
@@ -39,8 +38,7 @@
       "field": "Vehicle_km",
       "type": "quantitative",
       "stack": "center",
-      "title": null,
-      "axis": null
+      "title": "Billion vehicle kilometers"
     },
     "color": {
       "field": "Vehicle_type",

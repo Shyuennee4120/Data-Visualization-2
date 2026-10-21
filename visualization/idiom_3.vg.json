@@ -1,17 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Car-driver commuting by state",
-    "subtitle": "Share of employed people, Census day 2021"
-  },
+    "text": "Share of employed people, Census day 2021"},
   "width": 500,
   "height": 500,
 
   "data": {
-    "url": "../data/state_commuting.csv",
-    "format": {
-      "type": "csv"
-    }
+    "url": "../data/state_commuting.csv"
   },
 
   "transform": [

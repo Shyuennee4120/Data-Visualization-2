@@ -1,12 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Travel-to-work methods by state",
-    "subtitle": [
-      "Share of all employed people, Census day 2021",
-      "Square-root colour scale highlights differences in smaller shares"
-    ]
-  },
   "width": 400,
   "height": 420,
 
@@ -167,11 +160,5 @@
         "format": ".2%"
       }
     ]
-  },
-
-  "config": {
-    "view": {
-      "stroke": null
-    }
   }
 }

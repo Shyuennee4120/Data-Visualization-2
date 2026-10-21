@@ -1,9 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Long-term change in passenger travel",
-    "subtitle": "1974-75 versus 2024-25"
-  },
   "width": 450,
   "height": 400,
   "padding": {

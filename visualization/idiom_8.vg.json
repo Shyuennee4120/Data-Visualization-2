@@ -1,12 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Annual road-travel growth by state",
-    "subtitle": "Each point represents one financial year's change"
-  },
   "width": 550,
   "height": 400,
-
+  
   "data": {
     "url": "../data/state_vehicle_travel.csv"
   },

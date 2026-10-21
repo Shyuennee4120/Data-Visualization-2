@@ -1,9 +1,5 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Inter-capital car passenger travel",
-    "subtitle": "2023-24, thousand passenger movements"
-  },
   "width": 450,
   "height": 400,
 

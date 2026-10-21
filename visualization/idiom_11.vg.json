@@ -1,11 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "title": {
-    "text": "Car-driver commuting by age and sex",
-    "subtitle": "Share of employed people within each age-and-sex group, Census day 2021"
-  },
-
   "width": 500,
   "height": 380,
 
@@ -96,7 +91,7 @@
     {
       "mark": {
         "type": "rule",
-        "color": "#aaaaaa",
+        "color": "#686464",
         "strokeWidth": 3
       },
       "encoding": {
@@ -154,9 +149,9 @@
       "mark": {
         "type": "point",
         "filled": true,
-        "size": 110,
+        "size": 200,
         "stroke": "white",
-        "strokeWidth": 1
+        "strokeWidth": 2
       },
       "encoding": {
         "x": {
@@ -201,11 +196,5 @@
         ]
       }
     }
-  ],
-
-  "config": {
-    "view": {
-      "stroke": null
-    }
-  }
+  ]
 }
