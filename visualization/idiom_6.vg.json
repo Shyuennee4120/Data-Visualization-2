@@ -1,13 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+
   "width": 450,
   "height": 400,
-  "padding": {
-    "left": 15,
-    "right": 180,
-    "top": 20,
-    "bottom": 15
-  },
 
   "data": {
     "url": "../data/national_passenger_travel.csv"
@@ -32,87 +27,72 @@
       "as": "Travel"
     },
     {
-      "calculate": "trim(datum.Mode) + ': ' + format(datum.Travel, '.1f')",
-      "as": "End_label"
+      "calculate": "trim(datum.Mode)",
+      "as": "Mode"
+    },
+    {
+      "pivot": "Financial year",
+      "value": "Travel",
+      "groupby": ["Mode"]
+    },
+    {
+      "filter": "isValid(datum['1974-75']) && isValid(datum['2024-25']) && datum['1974-75'] > 0"
+    },
+    {
+      "calculate": "(datum['2024-25'] - datum['1974-75']) / datum['1974-75'] * 100",
+      "as": "Growth_pct"
     }
   ],
 
+  "mark": {
+    "type": "bar",
+    "size": 35
+  },
+
   "encoding": {
-    "x": {
-      "field": "Financial year",
-      "type": "ordinal",
-      "sort": ["1974-75", "2024-25"],
-      "title": null,
-      "axis": {
-        "labelAngle": 0,
-        "labelPadding": 10
-      }
-    },
     "y": {
-      "field": "Travel",
+      "field": "Mode",
+      "type": "nominal",
+      "sort": "-x",
+      "title": "Transport mode"
+    },
+    "x": {
+      "field": "Growth_pct",
       "type": "quantitative",
-      "title": "Passenger travel (billion passenger km)",
-      "scale": {"zero": true}
+      "title": "Growth in passenger travel (%)",
+      "scale": {
+        "zero": true
+      }
     },
     "color": {
       "field": "Mode",
       "type": "nominal",
-      "legend": {
-        "title": "Transport mode",
-        "orient": "bottom"
-      }
-    }
-  },
-
-  "layer": [
-    {
-      "mark": {
-        "type": "line",
-        "strokeWidth": 2.5,
-        "point": {
-          "filled": true,
-          "size": 70
-        }
-      },
-      "encoding": {
-        "tooltip": [
-          {
-            "field": "Mode",
-            "type": "nominal"
-          },
-          {
-            "field": "Financial year",
-            "type": "ordinal"
-          },
-          {
-            "field": "Travel",
-            "type": "quantitative",
-            "title": "Billion passenger km",
-            "format": ".2f"
-          }
-        ]
-      }
+      "legend": null
     },
-    {
-      "transform": [
-        {
-          "filter": "datum['Financial year'] === '2024-25'"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "dx": 10,
-        "dy": {
-          "expr": "datum.Mode === 'Buses' ? -8 : datum.Mode === 'Rail' ? 8 : 0"
-        },
-        "fontSize": 12
+    "tooltip": [
+      {
+        "field": "Mode",
+        "type": "nominal",
+        "title": "Transport mode"
       },
-      "encoding": {
-        "text": {
-          "field": "End_label"
-        }
+      {
+        "field": "1974-75",
+        "type": "quantitative",
+        "title": "1974–75 (billion passenger km)",
+        "format": ".2f"
+      },
+      {
+        "field": "2024-25",
+        "type": "quantitative",
+        "title": "2024–25 (billion passenger km)",
+        "format": ".2f"
+      },
+      {
+        "field": "Growth_pct",
+        "type": "quantitative",
+        "title": "Growth (%)",
+        "format": ".1f"
       }
-    }
-  ]
+    ]
+  }
 }

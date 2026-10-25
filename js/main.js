@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.replaceChildren();
 
         await vegaEmbed(container, specification, {
-          actions: false
+          actions: false  // disable the three dots button
         });
       } catch (error) {
         showChartMessage(container, file, error);

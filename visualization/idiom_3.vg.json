@@ -78,7 +78,7 @@
         "scheme": "blues"
       },
       "legend": {
-        "title": "Car-driver share",
+        "title": "Car-driver proportion (%)",
         "format": ".0%"
       }
     },

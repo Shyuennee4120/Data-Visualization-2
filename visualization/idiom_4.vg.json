@@ -83,7 +83,7 @@
           "field": "Passenger cars",
           "type": "quantitative",
           "scale": {
-            "domain": [0, 60],
+            "domain": [0, 50],
             "range": [0, 2000]
           },
           "legend": {
