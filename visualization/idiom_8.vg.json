@@ -1,10 +1,13 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 550,
+  "width": 380,
   "height": 400,
-  
+
   "data": {
-    "url": "../data/state_vehicle_travel.csv"
+    "url": "../data/state_commuting.csv",
+    "format": {
+      "type": "csv"
+    }
   },
 
   "transform": [
@@ -17,144 +20,145 @@
         "Western Australia",
         "Tasmania",
         "Northern Territory",
-        "Australia Capital Territory"
+        "Australian Capital Territory"
       ],
-      "as": ["State", "Vehicle_km"]
+      "as": ["State", "People"]
     },
     {
-      "calculate": "datum.Vehicle_km == null || datum.Vehicle_km === '' ? null : toNumber(datum.Vehicle_km)",
-      "as": "Travel"
+      "calculate": "datum.People == null || datum.People === '' ? null : toNumber(datum.People)",
+      "as": "People_count"
     },
     {
-      "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
-      "as": "Year_start"
+      "calculate": "datum.Vehicles === 'Total' ? datum.People_count : null",
+      "as": "Total_value"
     },
     {
-      "calculate": "datum.State === 'New South Wales' ? 'NSW' : datum.State === 'Victoria' ? 'VIC' : datum.State === 'Queensland' ? 'QLD' : datum.State === 'South Australia' ? 'SA' : datum.State === 'Western Australia' ? 'WA' : datum.State === 'Tasmania' ? 'TAS' : datum.State === 'Northern Territory' ? 'NT' : 'ACT'",
-      "as": "State_code"
-    },
-    {
-      "window": [
+      "joinaggregate": [
         {
-          "op": "lag",
-          "field": "Travel",
-          "as": "Previous_travel"
-        },
-        {
-          "op": "lag",
-          "field": "Year_start",
-          "as": "Previous_year"
-        }
-      ],
-      "sort": [
-        {
-          "field": "Year_start",
-          "order": "ascending"
+          "op": "max",
+          "field": "Total_value",
+          "as": "Employed_total"
         }
       ],
       "groupby": ["State"]
     },
     {
-      "filter": "isValid(datum.Travel) && isValid(datum.Previous_travel) && datum.Previous_travel > 0 && datum.Year_start - datum.Previous_year === 1"
+      "filter": "indexof(['Total', 'Worked at home', 'Did not go to work', 'Not stated'], datum.Vehicles) < 0"
     },
     {
-      "calculate": "100 * (datum.Travel / datum.Previous_travel - 1)",
-      "as": "Annual_growth_pct"
+      "filter": "isValid(datum.People_count) && datum.Employed_total > 0"
+    },
+    {
+      "calculate": "datum.People_count / datum.Employed_total",
+      "as": "Mode_share"
     }
   ],
 
-  "layer": [
-    {
-      "data": {
-        "values": [{}]
-      },
-      "mark": {
-        "type": "rule",
-        "color": "#777777",
-        "strokeDash": [4, 4]
-      },
-      "encoding": {
-        "y": {
-          "datum": 0,
-          "type": "quantitative"
-        }
+  "mark": {
+    "type": "rect",
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+
+  "encoding": {
+    "x": {
+      "field": "State",
+      "type": "nominal",
+      "sort": [
+        "New South Wales",
+        "Victoria",
+        "Queensland",
+        "South Australia",
+        "Western Australia",
+        "Tasmania",
+        "Northern Territory",
+        "Australian Capital Territory"
+      ],
+      "title": null,
+      "axis": {
+        "labelAngle": -45,
+        "labelLimit": 230,
+        "labelFontSize": 12
       }
     },
-    {
-      "mark": {
-        "type": "boxplot",
-        "extent": 1.5,
-        "outliers": false,
-        "size": 35
-      },
-      "encoding": {
-        "x": {
-          "field": "State",
-          "type": "nominal",
-          "sort": ["New South Wales",
-          "Victoria",
-          "Queensland",
-          "South Australia",
-          "Western Australia",
-          "Tasmania",
-          "Northern Territory",
-          "Australia Capital Territory"],
-          "title": "State / territory",
-          "axis": {"labelAngle": -45}
-        },
-        "y": {
-          "field": "Annual_growth_pct",
-          "type": "quantitative",
-          "title": "Annual change in vehicle kilometres (%)"
-        },
-        "color": {
-          "value": "#9ecae1"
-        }
+
+    "y": {
+      "field": "Vehicles",
+      "type": "nominal",
+      "sort": [
+        "Car, as driver",
+        "Car, as passenger",
+        "Train",
+        "Bus",
+        "Tram/light rail",
+        "Ferry",
+        "Taxi/ride-share service",
+        "Truck",
+        "Motorbike/scooter",
+        "Bicycle",
+        "Walked only",
+        "Other Mode"
+      ],
+      "title": "Travel method",
+      "axis": {
+        "labelLimit": 220,
+        "labelFontSize": 12
       }
     },
-    {
-      "mark": {
-        "type": "circle",
-        "size": 35,
-        "opacity": 0.45,
-        "color": "#245a81"
+
+    "color": {
+      "field": "Mode_share",
+      "type": "quantitative",
+      "scale": {
+        "type": "sqrt",
+        "scheme": "yellowgreenblue",
+        "zero": true
       },
-      "encoding": {
-        "x": {
-          "field": "State",
-          "type": "nominal",
-          "sort": ["New South Wales", "Victoria", "Queesland", "Southern Australia", "Western Australia", "Tasmania", "Northen Territory", "Australia Capital Territory"],
-          "title": "State / territory",
-          "axis": {"labelAngle": 0}
-        },
-        "y": {
-          "field": "Annual_growth_pct",
-          "type": "quantitative",
-          "title": "Annual change in vehicle kilometres (%)"
-        },
-        "tooltip": [
-          {
-            "field": "State",
-            "type": "nominal"
-          },
-          {
-            "field": "Financial year",
-            "type": "ordinal"
-          },
-          {
-            "field": "Travel",
-            "type": "quantitative",
-            "title": "Billion vehicle km",
-            "format": ".2f"
-          },
-          {
-            "field": "Annual_growth_pct",
-            "type": "quantitative",
-            "title": "Annual growth (%)",
-            "format": ".2f"
-          }
-        ]
+      "legend": {
+        "title": "Share of employed people",
+        "format": ".1%",
+        "values": [
+          0,
+          0.01,
+          0.05,
+          0.10,
+          0.30,
+          0.60
+        ],
+        "gradientLength": 250,
+        "titleLimit": 220
       }
-    }
-  ]
+    },
+
+    "tooltip": [
+      {
+        "field": "State",
+        "type": "nominal",
+        "title": "State / territory"
+      },
+      {
+        "field": "Vehicles",
+        "type": "nominal",
+        "title": "Travel method"
+      },
+      {
+        "field": "People_count",
+        "type": "quantitative",
+        "title": "People",
+        "format": ",.0f"
+      },
+      {
+        "field": "Employed_total",
+        "type": "quantitative",
+        "title": "All employed people",
+        "format": ",.0f"
+      },
+      {
+        "field": "Mode_share",
+        "type": "quantitative",
+        "title": "Share of employed people",
+        "format": ".2%"
+      }
+    ]
+  }
 }

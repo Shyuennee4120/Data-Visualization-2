@@ -50,10 +50,10 @@ function showChartMessage(container, file, error) {
   console.error("Chart loading failed:", file, error);
 }
 
-// Load all 13 charts.
+// Load all 11 charts.
 document.addEventListener("DOMContentLoaded", async () => {
   const chartNumbers = Array.from(
-    { length: 13 },
+    { length: 11 },
     (_, index) => index + 1
   );
 
@@ -98,7 +98,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.replaceChildren();
 
         await vegaEmbed(container, specification, {
-          actions: false  // disable the three dots button
+          actions: false, // disable the three dots button
+          renderer: number === 7 ? "svg" : "canvas"
         });
       } catch (error) {
         showChartMessage(container, file, error);

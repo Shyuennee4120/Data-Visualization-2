@@ -1,10 +1,11 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 400,
-  "height": 420,
+
+  "width": 500,
+  "height": 380,
 
   "data": {
-    "url": "../data/state_commuting.csv",
+    "url": "../data/commuting_by_age_sex.csv",
     "format": {
       "type": "csv"
     }
@@ -12,20 +13,26 @@
 
   "transform": [
     {
-      "fold": [
-        "New South Wales",
-        "Victoria",
-        "Queensland",
-        "South Australia",
-        "Western Australia",
-        "Tasmania",
-        "Northern Territory",
-        "Australian Capital Territory"
-      ],
-      "as": ["State", "People"]
+      "filter": "datum.Sex === 'Males' || datum.Sex === 'Females'"
     },
     {
-      "calculate": "datum.People == null || datum.People === '' ? null : toNumber(datum.People)",
+      "fold": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years"
+      ],
+      "as": ["Age_raw", "People"]
+    },
+    {
+      "calculate": "datum.Age_raw === '75 years' ? '75 years and over' : datum.Age_raw",
+      "as": "Age_group"
+    },
+    {
+      "calculate": "toNumber(datum.People)",
       "as": "People_count"
     },
     {
@@ -37,128 +44,157 @@
         {
           "op": "max",
           "field": "Total_value",
-          "as": "Employed_total"
+          "as": "Group_total"
         }
       ],
-      "groupby": ["State"]
+      "groupby": ["Sex", "Age_group"]
     },
     {
-      "filter": "indexof(['Total', 'Worked at home', 'Did not go to work', 'Not stated'], datum.Vehicles) < 0"
+      "filter": "datum.Vehicles === 'Car, as driver' && datum.Group_total > 0"
     },
     {
-      "filter": "isValid(datum.People_count) && datum.Employed_total > 0"
+      "calculate": "datum.People_count / datum.Group_total",
+      "as": "Driver_share"
     },
     {
-      "calculate": "datum.People_count / datum.Employed_total",
-      "as": "Mode_share"
+      "pivot": "Sex",
+      "value": "Driver_share",
+      "groupby": ["Age_group"]
+    },
+    {
+      "calculate": "100 * (datum.Males - datum.Females)",
+      "as": "Gap_percentage_points"
     }
   ],
 
-  "mark": {
-    "type": "rect",
-    "stroke": "white",
-    "strokeWidth": 1
+  "encoding": {
+    "y": {
+      "field": "Age_group",
+      "type": "ordinal",
+      "sort": [
+        "15-24 years",
+        "25-34 years",
+        "35-44 years",
+        "45-54 years",
+        "55-64 years",
+        "65-74 years",
+        "75 years and over"
+      ],
+      "title": "Age group",
+      "axis": {
+        "labelLimit": 180
+      }
+    }
   },
 
-  "encoding": {
-    "x": {
-      "field": "State",
-      "type": "nominal",
-      "sort": [
-        "New South Wales",
-        "Victoria",
-        "Queensland",
-        "South Australia",
-        "Western Australia",
-        "Tasmania",
-        "Northern Territory",
-        "Australian Capital Territory"
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#686464",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "Males",
+          "type": "quantitative",
+          "title": "Car-driver share of employed people",
+          "scale": {
+            "domain": [0, 1]
+          },
+          "axis": {
+            "format": ".0%"
+          }
+        },
+        "x2": {
+          "field": "Females"
+        },
+        "tooltip": [
+          {
+            "field": "Age_group",
+            "type": "ordinal",
+            "title": "Age group"
+          },
+          {
+            "field": "Males",
+            "type": "quantitative",
+            "title": "Male car-driver share",
+            "format": ".1%"
+          },
+          {
+            "field": "Females",
+            "type": "quantitative",
+            "title": "Female car-driver share",
+            "format": ".1%"
+          },
+          {
+            "field": "Gap_percentage_points",
+            "type": "quantitative",
+            "title": "Male minus female (percentage points)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "Males",
+            "Females"
+          ],
+          "as": ["Sex", "Share"]
+        }
       ],
-      "title": null,
-      "axis": {
-        "labelAngle": -45,
-        "labelLimit": 230,
-        "labelFontSize": 12
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 200,
+        "stroke": "white",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "Share",
+          "type": "quantitative",
+          "title": "Car-driver share of employed people",
+          "scale": {
+            "domain": [0, 1]
+          },
+          "axis": {
+            "format": ".0%"
+          }
+        },
+        "color": {
+          "field": "Sex",
+          "type": "nominal",
+          "scale": {
+            "domain": ["Males", "Females"],
+            "range": ["#2878b5", "#d97732"]
+          },
+          "legend": {
+            "title": "Sex",
+            "orient": "bottom"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Age_group",
+            "type": "ordinal",
+            "title": "Age group"
+          },
+          {
+            "field": "Sex",
+            "type": "nominal"
+          },
+          {
+            "field": "Share",
+            "type": "quantitative",
+            "title": "Car-driver share",
+            "format": ".1%"
+          }
+        ]
       }
-    },
-
-    "y": {
-      "field": "Vehicles",
-      "type": "nominal",
-      "sort": [
-        "Car, as driver",
-        "Car, as passenger",
-        "Train",
-        "Bus",
-        "Tram/light rail",
-        "Ferry",
-        "Taxi/ride-share service",
-        "Truck",
-        "Motorbike/scooter",
-        "Bicycle",
-        "Walked only",
-        "Other Mode"
-      ],
-      "title": "Travel method",
-      "axis": {
-        "labelLimit": 220,
-        "labelFontSize": 12
-      }
-    },
-
-    "color": {
-      "field": "Mode_share",
-      "type": "quantitative",
-      "scale": {
-        "type": "sqrt",
-        "scheme": "yellowgreenblue",
-        "zero": true
-      },
-      "legend": {
-        "title": "Share of employed people",
-        "format": ".1%",
-        "values": [
-          0,
-          0.01,
-          0.05,
-          0.10,
-          0.30,
-          0.60
-        ],
-        "gradientLength": 250,
-        "titleLimit": 220
-      }
-    },
-
-    "tooltip": [
-      {
-        "field": "State",
-        "type": "nominal",
-        "title": "State / territory"
-      },
-      {
-        "field": "Vehicles",
-        "type": "nominal",
-        "title": "Travel method"
-      },
-      {
-        "field": "People_count",
-        "type": "quantitative",
-        "title": "People",
-        "format": ",.0f"
-      },
-      {
-        "field": "Employed_total",
-        "type": "quantitative",
-        "title": "All employed people",
-        "format": ",.0f"
-      },
-      {
-        "field": "Mode_share",
-        "type": "quantitative",
-        "title": "Share of employed people",
-        "format": ".2%"
-      }
-    ]
-  }
+    }
+  ]
 }

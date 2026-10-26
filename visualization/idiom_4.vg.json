@@ -1,9 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": "1976-77 to 2024-25: Slider selects the financial year's starting year",
-  "width": 550,
+  "width": 500,
   "height": 450,
-
   "params": [
     {
       "name": "Year_selection",
@@ -17,11 +16,9 @@
       }
     }
   ],
-
   "projection": {
     "type": "mercator"
   },
-
   "layer": [
     {
       "data": {
@@ -33,15 +30,81 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#919395",
-        "stroke": "white"
+        "fill": "lightgrey",
+        "stroke": "darkgrey"
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "State",
+          "type": "nominal"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "color": "#555555",
+        "font": "Segoe UI",
+        "fontSize": 9,
+        "type": "text",
+        "fontWeight": "bold"
+      },
+      "data": {
+        "values": [
+          {
+            "latitude": -25,
+            "State": "Western Australia",
+            "longitude": 121
+          },
+          {
+            "latitude": -20,
+            "State": "Northern Territory",
+            "longitude": 133.5
+          },
+          {
+            "latitude": -30,
+            "State": "South Australia",
+            "longitude": 134
+          },
+          {
+            "latitude": -22,
+            "State": "Queensland",
+            "longitude": 144
+          },
+          {
+            "latitude": -32,
+            "State": "New South Wales",
+            "longitude": 146
+          },
+          {
+            "latitude": -37,
+            "State": "Victoria",
+            "longitude": 142.5
+          },
+          {
+            "latitude": -44,
+            "State": "Tasmania",
+            "longitude": 145.5
+          },
+          {
+            "latitude": -36.2,
+            "State": "Australian Capital Territory",
+            "longitude": 154
+          }
+        ]
       }
     },
     {
       "data": {
         "url": "../data/capital_city_passenger_travel.csv"
       },
-
       "transform": [
         {
           "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
@@ -57,19 +120,20 @@
               "url": "../data/city_coordinates.csv"
             },
             "key": "City",
-            "fields": ["latitude", "longitude"]
+            "fields": [
+              "latitude",
+              "longitude"
+            ]
           }
         }
       ],
-
       "mark": {
         "type": "circle",
         "color": "#2878b5",
-        "opacity": 0.7,
+        "opacity": 0.5,
         "stroke": "white",
         "strokeWidth": 1
       },
-
       "encoding": {
         "longitude": {
           "field": "longitude",
@@ -83,8 +147,14 @@
           "field": "Passenger cars",
           "type": "quantitative",
           "scale": {
-            "domain": [0, 50],
-            "range": [0, 2000]
+            "domain": [
+              0,
+              50
+            ],
+            "range": [
+              0,
+              2000
+            ]
           },
           "legend": {
             "title": "Billion passenger km"
@@ -106,6 +176,35 @@
             "format": ".2f"
           }
         ]
+      }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "City",
+          "type": "nominal"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "dx": 8,
+        "color": "black",
+        "align": "left",
+        "fontWeight": "bold",
+        "fontSize": 9,
+        "font": "Segoe UI",
+        "dy": -10,
+        "type": "text"
+      },
+      "data": {
+        "url": "../data/city_coordinates.csv"
       }
     }
   ]

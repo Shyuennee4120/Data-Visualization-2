@@ -1,17 +1,12 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-
-  "width": 450,
-  "height": 400,
-
+  "title": "Ranked by national passenger kilometres, 1974-75 to 2024-25",
+  "width": 550,
+  "height": 350,
   "data": {
     "url": "../data/national_passenger_travel.csv"
   },
-
   "transform": [
-    {
-      "filter": "datum['Financial year'] === '1974-75' || datum['Financial year'] === '2024-25'"
-    },
     {
       "fold": [
         "Passenger cars",
@@ -20,79 +15,160 @@
         "Air",
         "Other "
       ],
-      "as": ["Mode", "Passenger_km"]
+      "as": [
+        "Mode",
+        "Passenger_km"
+      ]
     },
     {
       "calculate": "toNumber(datum.Passenger_km)",
       "as": "Travel"
     },
     {
-      "calculate": "trim(datum.Mode)",
-      "as": "Mode"
+      "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
+      "as": "Year_start"
     },
     {
-      "pivot": "Financial year",
-      "value": "Travel",
-      "groupby": ["Mode"]
+      "window": [
+        {
+          "op": "rank",
+          "as": "Rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Travel",
+          "order": "descending"
+        }
+      ],
+      "groupby": [
+        "Financial year"
+      ]
     },
     {
-      "filter": "isValid(datum['1974-75']) && isValid(datum['2024-25']) && datum['1974-75'] > 0"
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "Year_start",
+          "as": "Latest_year"
+        }
+      ]
     },
     {
-      "calculate": "(datum['2024-25'] - datum['1974-75']) / datum['1974-75'] * 100",
-      "as": "Growth_pct"
+      "calculate": "datum.Year_start === datum.Latest_year ? datum.Rank : null",
+      "as": "Latest_rank_value"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "max",
+          "field": "Latest_rank_value",
+          "as": "Latest_rank"
+        }
+      ],
+      "groupby": [
+        "Mode"
+      ]
+    },
+    {
+      "calculate": "datum.Latest_rank <= 3 ? trim(datum.Mode) : 'Other modes'",
+      "as": "Highlight_group"
     }
   ],
-
   "mark": {
-    "type": "bar",
-    "size": 35
+    "type": "line",
+    "strokeWidth": 3,
+    "point": {
+      "filled": true,
+      "size": 65
+    }
   },
-
   "encoding": {
-    "y": {
-      "field": "Mode",
-      "type": "nominal",
-      "sort": "-x",
-      "title": "Transport mode"
-    },
     "x": {
-      "field": "Growth_pct",
+      "field": "Year_start",
       "type": "quantitative",
-      "title": "Growth in passenger travel (%)",
+      "title": "Financial year starting",
       "scale": {
-        "zero": true
+        "zero": false
+      },
+      "axis": {
+        "format": "d",
+        "tickCount": 10
+      }
+    },
+    "y": {
+      "field": "Rank",
+      "type": "quantitative",
+      "title": "Rank by passenger travel",
+      "scale": {
+        "domain": [
+          1,
+          5
+        ],
+        "reverse": true,
+        "zero": false
+      },
+      "axis": {
+        "values": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "format": "d"
       }
     },
     "color": {
-      "field": "Mode",
+      "field": "Highlight_group",
       "type": "nominal",
-      "legend": null
+      "scale": {
+        "domain": [
+          "Passenger cars",
+          "Air",
+          "Other",
+          "Other modes"
+        ],
+        "range": [
+          "#2878b5",
+          "#d97732",
+          "#27866f",
+          "#cccccc"
+        ]
+      },
+      "legend": {
+        "title": "Top 3 modes in 2024-25",
+        "orient": "bottom"
+      }
+    },
+    "order": {
+      "field": "Year_start",
+      "type": "quantitative"
     },
     "tooltip": [
       {
+        "field": "Financial year",
+        "type": "ordinal"
+      },
+      {
         "field": "Mode",
-        "type": "nominal",
-        "title": "Transport mode"
+        "type": "nominal"
       },
       {
-        "field": "1974-75",
+        "field": "Rank",
         "type": "quantitative",
-        "title": "1974–75 (billion passenger km)",
+        "format": "d"
+      },
+      {
+        "field": "Travel",
+        "type": "quantitative",
+        "title": "Billion passenger km",
         "format": ".2f"
-      },
-      {
-        "field": "2024-25",
-        "type": "quantitative",
-        "title": "2024–25 (billion passenger km)",
-        "format": ".2f"
-      },
-      {
-        "field": "Growth_pct",
-        "type": "quantitative",
-        "title": "Growth (%)",
-        "format": ".1f"
       }
-    ]
+    ],
+    "detail": {
+      "field": "Mode",
+      "type": "nominal"
+    }
   }
 }

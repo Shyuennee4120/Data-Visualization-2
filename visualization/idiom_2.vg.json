@@ -22,6 +22,7 @@
   ],
 
   "mark": "area",
+  
 
   "encoding": {
     "x": {
@@ -41,8 +42,26 @@
       "title": "Billion vehicle kilometers"
     },
     "color": {
-      "field": "Vehicle_type",
-      "type": "nominal",
+    "field": "Vehicle_type",
+    "type": "nominal",
+    "scale": {
+      "domain": [
+        "Passenger cars",
+        "Motor cycles",
+        "Buses",
+        "Light commercial vehicles",
+        "Rigid and other trucks",
+        "Articulated trucks"
+      ],
+      "range": [
+        "pink",
+        "steelblue",
+        "orange",
+        "lightgreen",
+        "brown",
+        "purple"
+      ]
+    },
       "legend": {
         "title": "Vehicle type",
         "orient": "bottom"

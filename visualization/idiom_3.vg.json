@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
-    "text": "Share of employed people, Census day 2021"},
+    "text": "(Share of employed people, Census day 2021)"},
   "width": 500,
   "height": 500,
 
@@ -59,53 +59,75 @@
     "type": "mercator"
   },
 
-  "mark": {
-    "type": "geoshape",
-    "color": "#547690",
-    "stroke": "white",
-    "strokeWidth": 1
-  },
-
-  "encoding": {
-    "shape": {
-      "field": "Boundary",
-      "type": "geojson"
+  "layer": [
+  {
+    "mark": {
+      "type": "geoshape",
+      "stroke": "white",
+      "strokeWidth": 1
     },
-    "color": {
-      "field": "Car_driver_share",
-      "type": "quantitative",
-      "scale": {
-        "scheme": "blues"
+    "encoding": {
+      "shape": {
+        "field": "Boundary",
+        "type": "geojson"
       },
-      "legend": {
-        "title": "Car-driver proportion (%)",
-        "format": ".0%"
-      }
-    },
-    "tooltip": [
-      {
-        "field": "State",
-        "type": "nominal",
-        "title": "State / territory"
-      },
-      {
-        "field": "Car, as driver",
-        "type": "quantitative",
-        "title": "Car drivers",
-        "format": ",.0f"
-      },
-      {
-        "field": "Total",
-        "type": "quantitative",
-        "title": "Employed people",
-        "format": ",.0f"
-      },
-      {
+      "color": {
         "field": "Car_driver_share",
         "type": "quantitative",
-        "title": "Car-driver share",
-        "format": ".1%"
+        "scale": {
+          "scheme": "browns"
+        },
+        "legend": {
+          "title": "Car-driver proportion",
+          "format": ".0%"
+        }
+      },
+      "tooltip": [
+        {
+          "field": "State",
+          "type": "nominal"
+        },
+        {
+          "field": "Car_driver_share",
+          "type": "quantitative",
+          "title": "Car-driver proportion",
+          "format": ".1%"
+        }
+      ]
+    }
+  },
+  {
+    "data": {
+      "values": [
+        {"Label": "Western Australia",  "longitude": 122,   "latitude": -25},
+        {"Label": "Northern Territory",  "longitude": 133.5, "latitude": -19.5},
+        {"Label": "South Australia",  "longitude": 135,   "latitude": -30},
+        {"Label": "Queensland", "longitude": 145,   "latitude": -22},
+        {"Label": "New South Wales", "longitude": 147,   "latitude": -32},
+        {"Label": "Victoria", "longitude": 144.5, "latitude": -37},
+        {"Label": "Tasmania", "longitude": 146.5, "latitude": -42},
+        {"Label": "Australian Capital Territory", "longitude": 149.1, "latitude": -35.5}
+      ]
+    },
+    "mark": {
+      "type": "text",
+      "fontSize": 10,
+      "fontWeight": "bold",
+      "color": "black"
+    },
+    "encoding": {
+      "longitude": {
+        "field": "longitude",
+        "type": "quantitative"
+      },
+      "latitude": {
+        "field": "latitude",
+        "type": "quantitative"
+      },
+      "text": {
+        "field": "Label"
       }
-    ]
+    }
   }
+]
 }

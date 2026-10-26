@@ -1,200 +1,260 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 
-  "width": 500,
-  "height": 380,
-
   "data": {
-    "url": "../data/commuting_by_age_sex.csv",
-    "format": {
-      "type": "csv"
-    }
+    "url": "../data/dwelling_vehicle_ownership.csv",
+    "format": {"type": "csv"}
   },
 
   "transform": [
     {
-      "filter": "datum.Sex === 'Males' || datum.Sex === 'Females'"
+      "filter": "indexof(['Separate house', 'Semi-detached, row or terrace house, townhouse', 'Flat or apartment', 'Total other dwelling'], datum['Dwelling structure']) >= 0"
+    },
+    {
+      "calculate": "datum['Dwelling structure']",
+      "as": "Dwelling"
+    },
+    {
+      "calculate": "datum.Dwelling === 'Separate house' ? 'Separate house' : datum.Dwelling === 'Semi-detached, row or terrace house, townhouse' ? 'Townhouse / terrace' : datum.Dwelling === 'Flat or apartment' ? 'Flat / apartment' : 'Other dwelling'",
+      "as": "Dwelling_label"
     },
     {
       "fold": [
-        "15-24 years",
-        "25-34 years",
-        "35-44 years",
-        "45-54 years",
-        "55-64 years",
-        "65-74 years",
-        "75 years"
+        "No motor vehicles",
+        "One motor vehicle",
+        "Two motor vehicles",
+        "Three motor vehicles",
+        "Four or more motor vehicles",
+        "number of motor vehicles not stated"
       ],
-      "as": ["Age_raw", "People"]
+      "as": ["Vehicle_category", "Count_raw"]
     },
     {
-      "calculate": "datum.Age_raw === '75 years' ? '75 years and over' : datum.Age_raw",
-      "as": "Age_group"
+      "calculate": "toNumber(datum.Count_raw)",
+      "as": "Dwelling_count"
     },
     {
-      "calculate": "toNumber(datum.People)",
-      "as": "People_count"
+      "calculate": "indexof(['No motor vehicles', 'One motor vehicle', 'Two motor vehicles', 'Three motor vehicles', 'Four or more motor vehicles', 'number of motor vehicles not stated'], datum.Vehicle_category)",
+      "as": "Vehicle_order"
     },
     {
-      "calculate": "datum.Vehicles === 'Total' ? datum.People_count : null",
-      "as": "Total_value"
+      "calculate": "datum.Vehicle_order === 0 ? 'No vehicles' : datum.Vehicle_order === 1 ? '1 vehicle' : datum.Vehicle_order === 2 ? '2 vehicles' : datum.Vehicle_order === 3 ? '3 vehicles' : datum.Vehicle_order === 4 ? '4 or more vehicles' : 'Not stated'",
+      "as": "Vehicle_label"
     },
     {
       "joinaggregate": [
         {
-          "op": "max",
-          "field": "Total_value",
-          "as": "Group_total"
+          "op": "sum",
+          "field": "Dwelling_count",
+          "as": "Dwelling_total"
         }
       ],
-      "groupby": ["Sex", "Age_group"]
+      "groupby": ["Dwelling"]
     },
     {
-      "filter": "datum.Vehicles === 'Car, as driver' && datum.Group_total > 0"
+      "calculate": "datum.Dwelling_count / datum.Dwelling_total",
+      "as": "Exact_share"
     },
     {
-      "calculate": "datum.People_count / datum.Group_total",
-      "as": "Driver_share"
+      "calculate": "datum.Exact_share * 100",
+      "as": "Exact_squares"
     },
     {
-      "pivot": "Sex",
-      "value": "Driver_share",
-      "groupby": ["Age_group"]
+      "calculate": "floor(datum.Exact_squares)",
+      "as": "Base_squares"
     },
     {
-      "calculate": "100 * (datum.Males - datum.Females)",
-      "as": "Gap_percentage_points"
+      "calculate": "datum.Exact_squares - datum.Base_squares",
+      "as": "Remainder"
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "Base_squares",
+          "as": "Base_total"
+        }
+      ],
+      "groupby": ["Dwelling"]
+    },
+    {
+      "window": [
+        {
+          "op": "row_number",
+          "as": "Remainder_rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Remainder",
+          "order": "descending"
+        },
+        {
+          "field": "Vehicle_order",
+          "order": "ascending"
+        }
+      ],
+      "groupby": ["Dwelling"]
+    },
+    {
+      "calculate": "datum.Base_squares + (datum.Remainder_rank <= 100 - datum.Base_total ? 1 : 0)",
+      "as": "Square_count"
+    },
+    {
+      "stack": "Square_count",
+      "groupby": ["Dwelling"],
+      "sort": [
+        {
+          "field": "Vehicle_order",
+          "order": "ascending"
+        }
+      ],
+      "offset": "zero",
+      "as": ["Square_start", "Square_end"]
+    },
+    {
+      "calculate": "[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99]",
+      "as": "Tiles"
+    },
+    {
+      "flatten": ["Tiles"],
+      "as": ["Tile"]
+    },
+    {
+      "filter": "datum.Tile >= datum.Square_start && datum.Tile < datum.Square_end"
+    },
+    {
+      "calculate": "datum.Tile % 10",
+      "as": "Column"
+    },
+    {
+      "calculate": "floor(datum.Tile / 10)",
+      "as": "Row"
     }
   ],
 
-  "encoding": {
-    "y": {
-      "field": "Age_group",
-      "type": "ordinal",
-      "sort": [
-        "15-24 years",
-        "25-34 years",
-        "35-44 years",
-        "45-54 years",
-        "55-64 years",
-        "65-74 years",
-        "75 years and over"
-      ],
-      "title": "Age group",
-      "axis": {
-        "labelLimit": 180
-      }
+  "facet": {
+    "field": "Dwelling_label",
+    "type": "nominal",
+    "sort": [
+      "Separate house",
+      "Townhouse / terrace",
+      "Flat / apartment",
+      "Other dwelling"
+    ],
+    "header": {
+      "title": null,
+      "labelFontSize": 14,
+      "labelFontWeight": "bold"
     }
   },
 
-  "layer": [
-    {
-      "mark": {
-        "type": "rule",
-        "color": "#686464",
-        "strokeWidth": 3
-      },
-      "encoding": {
-        "x": {
-          "field": "Males",
-          "type": "quantitative",
-          "title": "Car-driver share of employed people",
-          "scale": {
-            "domain": [0, 1]
-          },
-          "axis": {
-            "format": ".0%"
-          }
-        },
-        "x2": {
-          "field": "Females"
-        },
-        "tooltip": [
-          {
-            "field": "Age_group",
-            "type": "ordinal",
-            "title": "Age group"
-          },
-          {
-            "field": "Males",
-            "type": "quantitative",
-            "title": "Male car-driver share",
-            "format": ".1%"
-          },
-          {
-            "field": "Females",
-            "type": "quantitative",
-            "title": "Female car-driver share",
-            "format": ".1%"
-          },
-          {
-            "field": "Gap_percentage_points",
-            "type": "quantitative",
-            "title": "Male minus female (percentage points)",
-            "format": ".1f"
-          }
-        ]
-      }
+  "columns": 2,
+  "spacing": 30,
+
+  "spec": {
+    "width": 230,
+    "height": 230,
+
+    "mark": {
+      "type": "rect",
+      "stroke": "white",
+      "strokeWidth": 2
     },
-    {
-      "transform": [
-        {
-          "fold": [
-            "Males",
-            "Females"
-          ],
-          "as": ["Sex", "Share"]
-        }
-      ],
-      "mark": {
-        "type": "point",
-        "filled": true,
-        "size": 200,
-        "stroke": "white",
-        "strokeWidth": 2
+
+    "encoding": {
+      "x": {
+        "field": "Column",
+        "type": "ordinal",
+        "sort": "ascending",
+        "scale": {
+          "domain": [0,1,2,3,4,5,6,7,8,9],
+          "paddingInner": 0.05
+        },
+        "axis": null
       },
-      "encoding": {
-        "x": {
-          "field": "Share",
-          "type": "quantitative",
-          "title": "Car-driver share of employed people",
-          "scale": {
-            "domain": [0, 1]
-          },
-          "axis": {
-            "format": ".0%"
-          }
+
+      "y": {
+        "field": "Row",
+        "type": "ordinal",
+        "sort": "descending",
+        "scale": {
+          "domain": [9,8,7,6,5,4,3,2,1,0],
+          "paddingInner": 0.05
         },
-        "color": {
-          "field": "Sex",
+        "axis": null
+      },
+
+      "color": {
+        "field": "Vehicle_label",
+        "type": "nominal",
+        "scale": {
+          "domain": [
+            "No vehicles",
+            "1 vehicle",
+            "2 vehicles",
+            "3 vehicles",
+            "4 or more vehicles",
+            "Not stated"
+          ],
+          "range": [
+            "#f2cf5b",
+            "#8dd3c7",
+            "#3690c0",
+            "#756bb1",
+            "#303078",
+            "#bdbdbd"
+          ]
+        },
+        "legend": {
+          "title": "Household motor vehicles",
+          "orient": "bottom",
+          "columns": 3
+        }
+      },
+
+      "tooltip": [
+        {
+          "field": "Dwelling",
           "type": "nominal",
-          "scale": {
-            "domain": ["Males", "Females"],
-            "range": ["#2878b5", "#d97732"]
-          },
-          "legend": {
-            "title": "Sex",
-            "orient": "bottom"
-          }
+          "title": "Dwelling type"
         },
-        "tooltip": [
-          {
-            "field": "Age_group",
-            "type": "ordinal",
-            "title": "Age group"
-          },
-          {
-            "field": "Sex",
-            "type": "nominal"
-          },
-          {
-            "field": "Share",
-            "type": "quantitative",
-            "title": "Car-driver share",
-            "format": ".1%"
-          }
-        ]
-      }
+        {
+          "field": "Vehicle_label",
+          "type": "nominal",
+          "title": "Vehicle ownership"
+        },
+        {
+          "field": "Dwelling_count",
+          "type": "quantitative",
+          "title": "Dwellings in category",
+          "format": ",.0f"
+        },
+        {
+          "field": "Dwelling_total",
+          "type": "quantitative",
+          "title": "Total dwellings in this type",
+          "format": ",.0f"
+        },
+        {
+          "field": "Exact_share",
+          "type": "quantitative",
+          "title": "Exact share",
+          "format": ".1%"
+        },
+        {
+          "field": "Square_count",
+          "type": "quantitative",
+          "title": "Squares shown",
+          "format": ".0f"
+        }
+      ]
     }
-  ]
+  },
+
+  "resolve": {
+    "scale": {
+      "color": "shared"
+    }
+  }
 }

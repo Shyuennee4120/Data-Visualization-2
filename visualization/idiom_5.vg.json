@@ -1,10 +1,10 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 450,
+  "width": 550,
   "height": 400,
-
-  "projection": {"type": "mercator"},
-
+  "projection": {
+    "type": "mercator"
+  },
   "layer": [
     {
       "data": {
@@ -16,15 +16,86 @@
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#9a9a9a",
-        "stroke": "white"
+        "fill": "lightgrey",
+        "stroke": "darkgrey",
+        "strokeWidth": 1
       }
+    },
+    {
+      "encoding": {
+        "text": {
+          "field": "State_lines",
+          "type": "nominal"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 9,
+        "color": "grey"
+      },
+      "data": {
+        "values": [
+          {
+            "latitude": -25,
+            "State": "Western Australia",
+            "longitude": 121
+          },
+          {
+            "latitude": -20,
+            "State": "Northern Territory",
+            "longitude": 133.5
+          },
+          {
+            "latitude": -30,
+            "State": "South Australia",
+            "longitude": 134
+          },
+          {
+            "latitude": -22,
+            "State": "Queensland",
+            "longitude": 144
+          },
+          {
+            "latitude": -32,
+            "State": "New South Wales",
+            "longitude": 146
+          },
+          {
+            "latitude": -37,
+            "State": "Victoria",
+            "longitude": 142.5
+          },
+          {
+            "latitude": -44,
+            "State": "Tasmania",
+            "longitude": 145.5
+          },
+          {
+            "latitude": -38,
+            "State": "Australian Capital Territory",
+            "longitude": 153.8
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "datum.State === 'Western Australia' ? ['Western','Australia'] : datum.State === 'Northern Territory' ? ['Northern','Territory'] : datum.State === 'South Australia' ? ['South','Australia'] : datum.State === 'New South Wales' ? ['New South','Wales'] : datum.State === 'Australian Capital Territory' ? ['Australian Capital','Territory'] : [datum.State]",
+          "as": "State_lines"
+        }
+      ]
     },
     {
       "data": {
         "url": "../data/intercapital_car_travel.csv"
       },
-
       "transform": [
         {
           "filter": "datum['Financial year'] === '2023-24'"
@@ -38,7 +109,10 @@
             "Melbourne - Brisbane",
             "Sydney - Adelaide"
           ],
-          "as": ["Corridor", "Movements"]
+          "as": [
+            "Corridor",
+            "Movements"
+          ]
         },
         {
           "calculate": "trim(split(datum.Corridor, '-')[0])",
@@ -59,9 +133,15 @@
               "url": "../data/city_coordinates.csv"
             },
             "key": "City",
-            "fields": ["latitude", "longitude"]
+            "fields": [
+              "latitude",
+              "longitude"
+            ]
           },
-          "as": ["Latitude1", "Longitude1"]
+          "as": [
+            "Latitude1",
+            "Longitude1"
+          ]
         },
         {
           "lookup": "City2",
@@ -70,52 +150,90 @@
               "url": "../data/city_coordinates.csv"
             },
             "key": "City",
-            "fields": ["latitude", "longitude"]
+            "fields": [
+              "latitude",
+              "longitude"
+            ]
           },
-          "as": ["Latitude2", "Longitude2"]
+          "as": [
+            "Latitude2",
+            "Longitude2"
+          ]
+        },
+        {
+          "filter": "isValid(datum.Car_movements_thousand) && datum.Car_movements_thousand > 0"
+        },
+        {
+          "calculate": "datum.Corridor === 'Sydney - Melbourne' ? 1 : 0",
+          "as": "Bend"
+        },
+        {
+          "calculate": "[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]",
+          "as": "Steps"
+        },
+        {
+          "flatten": [
+            "Steps"
+          ],
+          "as": [
+            "Step"
+          ]
+        },
+        {
+          "calculate": "datum.Step / 40",
+          "as": "t"
+        },
+        {
+          "calculate": "(1-datum.t)*datum.Longitude1 + datum.t*datum.Longitude2 + 4*datum.t*(1-datum.t)*2.5*datum.Bend",
+          "as": "Link_lon"
+        },
+        {
+          "calculate": "(1-datum.t)*datum.Latitude1 + datum.t*datum.Latitude2 - 4*datum.t*(1-datum.t)*0.8*datum.Bend",
+          "as": "Link_lat"
         }
       ],
-
       "mark": {
-        "type": "rule",
-        "color": "#2878b5",
-        "opacity": 0.65
+        "type": "line",
+        "opacity": 0.7
       },
-
       "encoding": {
         "longitude": {
-          "field": "Longitude1",
+          "field": "Link_lon",
           "type": "quantitative"
         },
         "latitude": {
-          "field": "Latitude1",
+          "field": "Link_lat",
           "type": "quantitative"
         },
-        "longitude2": {"field": "Longitude2"},
-        "latitude2": {"field": "Latitude2"},
-
         "size": {
           "field": "Car_movements_thousand",
           "type": "quantitative",
           "scale": {
             "zero": true,
-            "range": [0, 18]
+            "range": [
+              1,
+              12
+            ]
           },
           "legend": {
-            "title": "Movements (thousands)"
+            "title": [
+              "Passenger movements",
+              "(thousands)"
+            ],
+            "orient": "right",
+            "format": ",.0f"
           }
         },
-
         "tooltip": [
           {
             "field": "City1",
             "type": "nominal",
-            "title": "City 1"
+            "title": "From (City): "
           },
           {
             "field": "City2",
             "type": "nominal",
-            "title": "City 2"
+            "title": "To (City): "
           },
           {
             "field": "Financial year",
@@ -127,7 +245,42 @@
             "title": "Car movements (thousands)",
             "format": ",.1f"
           }
-        ]
+        ],
+        "detail": {
+          "field": "Corridor",
+          "type": "nominal"
+        },
+        "order": {
+          "field": "Step",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "Corridor",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Sydney - Melbourne",
+              "Sydney - Canberra",
+              "Sydney - Brisbane",
+              "Melbourne - Adelaide",
+              "Melbourne - Brisbane",
+              "Sydney - Adelaide"
+            ],
+            "range": [
+              "#0072B2",
+              "#D55E00",
+              "#009E73",
+              "#CC79A7",
+              "red",
+              "orange"
+            ]
+          },
+          "legend": {
+            "title": "City pair",
+            "orient": "right",
+            "labelLimit": 180
+          }
+        }
       }
     },
     {
@@ -153,8 +306,9 @@
         {
           "mark": {
             "type": "circle",
-            "size": 65,
-            "color": "#333333"
+            "size": 60,
+            "color": "#19313c",
+            "opacity": 1
           },
           "encoding": {
             "tooltip": {
@@ -166,13 +320,38 @@
         {
           "mark": {
             "type": "text",
+            "fontSize": 9,
+            "fontWeight": "bold",
+            "color": "black",
             "align": "left",
             "dx": 7,
-            "dy": -7,
-            "fontSize": 11
+            "dy": -8,
+            "stroke": "#f5f6f2",
+            "strokeWidth": 1,
+            "strokeJoin": "round"
           },
           "encoding": {
-            "text": {"field": "City"}
+            "text": {
+              "field": "City",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 9,
+            "fontWeight": "bold",
+            "color": "black",
+            "align": "left",
+            "dx": 7,
+            "dy": -8
+          },
+          "encoding": {
+            "text": {
+              "field": "City",
+              "type": "nominal"
+            }
           }
         }
       ]
