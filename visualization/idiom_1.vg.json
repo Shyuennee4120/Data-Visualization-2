@@ -1,58 +1,171 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 450,
-  "height": 300,
   "data": {
     "url": "../data/national_passenger_travel.csv"
   },
   "transform": [
     {
-      "fold": ["Passenger cars", "Buses", "Rail", "Air", "Other "],
-      "as": ["Mode", "Passenger_km"]
+      "fold": [
+        "Passenger cars",
+        "Buses",
+        "Rail",
+        "Air",
+        "Other "
+      ],
+      "as": [
+        "Mode",
+        "Passenger_km"
+      ]
+    },
+    {
+      "calculate": "toNumber(substring(datum['Financial year'], 0, 4))",
+      "as": "Year_start"
     }
   ],
-
-  "mark": {
-    "type": "line",
-    "tooltip": true
-  },
-
-  "encoding": {
-    "x": {
-      "field": "Financial year",
-      "type": "ordinal",
-      "sort": "ascending",
-      "title": "Financial year",
-      "axis": {
-        "labelAngle": -45,
-        "labelOverlap": true
+  "vconcat": [
+    {
+      "width": 450,
+      "height": 300,
+      "mark": {
+        "type": "line",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "Year_start",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "zero": false,
+            "domain": {
+              "param": "brush"
+            }
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 8
+          }
+        },
+        "y": {
+          "field": "Passenger_km",
+          "type": "quantitative",
+          "title": "Passenger travel (billion passenger km)",
+          "scale": {
+            "domain": [
+              0,
+              300
+            ],
+            "zero": true
+          }
+        },
+        "color": {
+          "field": "Mode",
+          "type": "nominal",
+          "title": "Transport mode"
+        },
+        "tooltip": [
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Mode",
+            "type": "nominal"
+          },
+          {
+            "field": "Passenger_km",
+            "type": "quantitative",
+            "title": "Billion passenger km",
+            "format": ".2f"
+          }
+        ]
       }
     },
-    "y": {
-      "field": "Passenger_km",
-      "type": "quantitative",
-      "title": "Passenger travel (billion passenger km)"
-    },
-    "color": {
-      "field": "Mode",
-      "type": "nominal",
-      "title": "Transport mode"
-    },
-    "tooltip": [
-      {
-        "field": "Financial year",
-        "type": "ordinal"
+    {
+      "width": 450,
+      "height": 65,
+      "title": {
+        "text": "(Drag across the overview to select years)",
+        "anchor": "start",
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "subtitleFontSize": 10,
+        "color": "grey"
       },
-      {
-        "field": "Mode",
-        "type": "nominal"
+      "params": [
+        {
+          "name": "brush",
+          "select": {
+            "type": "interval",
+            "encodings": [
+              "x"
+            ],
+            "clear": "dblclick"
+          }
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.5
       },
-      {
-        "field": "Passenger_km",
-        "type": "quantitative",
-        "title": "Billion passenger km",
-        "format": ".2f"
+      "encoding": {
+        "x": {
+          "field": "Year_start",
+          "type": "quantitative",
+          "title": "Financial year starting",
+          "scale": {
+            "zero": false
+          },
+          "axis": {
+            "format": "d",
+            "tickCount": 8
+          }
+        },
+        "y": {
+          "field": "Passenger_km",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "tickCount": 3,
+            "grid": false
+          },
+          "scale": {
+            "domain": [
+              0,
+              300
+            ],
+            "zero": true
+          }
+        },
+        "color": {
+          "field": "Mode",
+          "type": "nominal",
+          "title": "Transport mode"
+        },
+        "tooltip": [
+          {
+            "field": "Financial year",
+            "type": "ordinal"
+          },
+          {
+            "field": "Mode",
+            "type": "nominal"
+          },
+          {
+            "field": "Passenger_km",
+            "type": "quantitative",
+            "title": "Billion passenger km",
+            "format": ".2f"
+          }
+        ]
       }
-    ]
+    }
+  ],
+  "spacing": 22,
+  "resolve": {
+    "scale": {
+      "y": "independent",
+      "color": "shared"
+    }
   }
 }

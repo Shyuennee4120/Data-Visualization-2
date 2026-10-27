@@ -79,7 +79,7 @@
           "1980-81", "1981-82", "1982-83", "1983-84", "1984-85",
           "1985-86", "1986-87", "1987-88", "1988-89", "1989-90",
           "1990-91", "1991-92", "1992-93", "1993-94", "1994-95",
-          "1995-96", "1996-97", "1997-98", "1998-99", "1999-00", 
+          "1995-96", "1996-97", "1997-98", "1998-99", "1999-00",
           "2000-01", "2001-02", "2002-03", "2003-04", "2004-05",
           "2005-06", "2006-07", "2007-08", "2008-09", "2009-10",
           "2010-11", "2011-12", "2012-13", "2013-14", "2014-15",
@@ -144,6 +144,12 @@
             "y": {
               "datum": 0,
               "type": "quantitative"
+            },
+            "x": {
+              "value": 0
+            },
+            "x2": {
+              "value": 550
             }
           }
         },
@@ -167,24 +173,6 @@
             "cursor": "pointer"
           },
           "encoding": {
-            "x": {
-              "field": "State_label",
-              "type": "nominal",
-              "sort": [
-                "New South Wales",
-                "Victoria",
-                "Queensland",
-                "South Australia",
-                "Western Australia",
-                "Tasmania",
-                "Northern Territory",
-                "Australian Capital Territory"
-              ],
-              "title": "State / territory",
-              "axis": {
-                "labelAngle": -45
-              }
-            },
             "y": {
               "value": 0
             },
@@ -201,35 +189,6 @@
             "size": 35
           },
           "encoding": {
-            "x": {
-              "field": "State_label",
-              "type": "nominal",
-              "sort": [
-                "New South Wales",
-                "Victoria",
-                "Queensland",
-                "South Australia",
-                "Western Australia",
-                "Tasmania",
-                "Northern Territory",
-                "Australian Capital Territory"
-              ],
-              "title": "State / territory",
-              "axis": {
-                "labelAngle": -45
-              }
-            },
-            "y": {
-              "field": "Annual_growth_pct",
-              "type": "quantitative",
-              "title": "Annual change in vehicle kilometres (%)",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
-                ]
-              }
-            },
             "color": {
               "condition": {
                 "value": "#68a9bc",
@@ -259,35 +218,6 @@
             "cursor": "pointer"
           },
           "encoding": {
-            "x": {
-              "field": "State_label",
-              "type": "nominal",
-              "sort": [
-                "New South Wales",
-                "Victoria",
-                "Queensland",
-                "South Australia",
-                "Western Australia",
-                "Tasmania",
-                "Northern Territory",
-                "Australian Capital Territory"
-              ],
-              "title": "State / territory",
-              "axis": {
-                "labelAngle": -45
-              }
-            },
-            "y": {
-              "field": "Annual_growth_pct",
-              "type": "quantitative",
-              "title": "Annual change in vehicle kilometres (%)",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
-                ]
-              }
-            },
             "size": {
               "condition": {
                 "test": "Year_focus === datum['Financial year'] || (Year_hover['Financial year'] && indexof(Year_hover['Financial year'], datum['Financial year']) >= 0)",
@@ -333,7 +263,39 @@
             ]
           }
         }
-      ]
+      ],
+      "encoding": {
+        "x": {
+          "field": "State_label",
+          "type": "nominal",
+          "sort": [
+            "New South Wales",
+            "Victoria",
+            "Queensland",
+            "South Australia",
+            "Western Australia",
+            "Tasmania",
+            "Northern Territory",
+            "Australian Capital Territory"
+          ],
+          "title": "State / territory",
+          "axis": {
+            "labelAngle": -45,
+            "labelFontSize": 12
+          }
+        },
+        "y": {
+          "field": "Annual_growth_pct",
+          "type": "quantitative",
+          "title": "Annual change in vehicle kilometres (%)",
+          "scale": {
+            "domain": [-9,14]
+          },
+          "axis": {
+            "format": ".2f"
+          }
+        }
+      }
     },
     {
       "width": 330,
@@ -346,7 +308,6 @@
         "font": "Cambria",
         "fontSize": 14,
         "subtitle": " ",
-        "subtitleFont": "Segoe UI",
         "subtitleFontSize": 11
       },
       "transform": [
@@ -368,21 +329,6 @@
             }
           },
           "encoding": {
-            "x": {
-              "field": "Annual_growth_pct",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
-                ]
-              },
-              "axis": {
-                "title": "Annual change in vehicle kilometres (%)",
-                "labelExpr": "datum.value + '%'",
-                "grid": false
-              }
-            },
             "y": {
               "value": 155
             }
@@ -410,217 +356,116 @@
               ]
             },
             {
-              "calculate": "'Typical growth (median): ' + format(datum.Median, '.1f') + '%'",
+              "calculate": "'Typical growth (median): ' + format(datum.Median, '.2f') + '%'",
               "as": "Median_label"
             },
             {
-              "calculate": "'Half the years: ' + format(datum.Q1, '.1f') + '% to ' + format(datum.Q3, '.1f') + '%'",
+              "calculate": "'Half the years: ' + format(datum.Q1, '.2f') + '% to ' + format(datum.Q3, '.2f') + '%'",
               "as": "Range_label"
-            },
-            {
-              "calculate": "(datum.Q1 + datum.Q3) / 2",
-              "as": "Mid"
             }
           ],
-          "mark": {
-            "type": "rule",
-            "color": "#19313c",
-            "strokeDash": [
-              2,
-              2
-            ]
-          },
-          "encoding": {
-            "x": {
-              "field": "Median",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
+          "layer": [
+            {
+              "mark": {
+                "type": "rule",
+                "color": "#19313c",
+                "strokeDash": [
+                  2,
+                  2
                 ]
               },
-              "axis": {
-                "title": "Annual change in vehicle kilometres (%)",
-                "labelExpr": "datum.value + '%'",
-                "grid": false
+              "encoding": {
+                "x": {
+                  "field": "Median",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": [
+                      -9,
+                      14
+                    ]
+                  },
+                  "axis": {
+                    "title": "Annual change in vehicle kilometres (%)",
+                    "labelExpr": "format(datum.value, '.2f') + '%'",
+                    "grid": false
+                  }
+                },
+                "y": {
+                  "value": 118
+                },
+                "y2": {
+                  "value": 138
+                }
               }
             },
-            "y": {
-              "value": 118
-            },
-            "y2": {
-              "value": 138
-            }
-          }
-        },
-        {
-          "transform": [
             {
-              "aggregate": [
-                {
-                  "op": "q1",
-                  "field": "Annual_growth_pct",
-                  "as": "Q1"
-                },
-                {
-                  "op": "q3",
-                  "field": "Annual_growth_pct",
-                  "as": "Q3"
-                },
-                {
-                  "op": "median",
-                  "field": "Annual_growth_pct",
-                  "as": "Median"
-                }
-              ]
-            },
-            {
-              "calculate": "'Typical growth (median): ' + format(datum.Median, '.1f') + '%'",
-              "as": "Median_label"
-            },
-            {
-              "calculate": "'Half the years: ' + format(datum.Q1, '.1f') + '% to ' + format(datum.Q3, '.1f') + '%'",
-              "as": "Range_label"
-            },
-            {
-              "calculate": "(datum.Q1 + datum.Q3) / 2",
-              "as": "Mid"
-            }
-          ],
-          "mark": {
-            "type": "text",
-            "font": "Segoe UI",
-            "fontSize": 12,
-            "fontWeight": "bold",
-            "color": "#19313c"
-          },
-          "encoding": {
-            "x": {
-              "value": 165
-            },
-            "y": {
-              "value": 105
-            },
-            "text": {
-              "field": "Median_label"
-            }
-          }
-        },
-        {
-          "transform": [
-            {
-              "aggregate": [
-                {
-                  "op": "q1",
-                  "field": "Annual_growth_pct",
-                  "as": "Q1"
-                },
-                {
-                  "op": "q3",
-                  "field": "Annual_growth_pct",
-                  "as": "Q3"
-                },
-                {
-                  "op": "median",
-                  "field": "Annual_growth_pct",
-                  "as": "Median"
-                }
-              ]
-            },
-            {
-              "calculate": "'Typical growth (median): ' + format(datum.Median, '.1f') + '%'",
-              "as": "Median_label"
-            },
-            {
-              "calculate": "'Half the years: ' + format(datum.Q1, '.1f') + '% to ' + format(datum.Q3, '.1f') + '%'",
-              "as": "Range_label"
-            },
-            {
-              "calculate": "(datum.Q1 + datum.Q3) / 2",
-              "as": "Mid"
-            }
-          ],
-          "mark": {
-            "type": "rule",
-            "color": "#16716b",
-            "strokeWidth": 2
-          },
-          "encoding": {
-            "x": {
-              "field": "Q1",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
-                ]
+              "mark": {
+                "type": "text",
+                "fontSize": 12,
+                "fontWeight": "bold",
+                "color": "#19313c"
               },
-              "axis": {
-                "title": "Annual change in vehicle kilometres (%)",
-                "labelExpr": "datum.value + '%'",
-                "grid": false
+              "encoding": {
+                "x": {
+                  "value": 165
+                },
+                "y": {
+                  "value": 105
+                },
+                "text": {
+                  "field": "Median_label"
+                }
               }
             },
-            "x2": {
-              "field": "Q3"
-            },
-            "y": {
-              "value": 191
-            }
-          }
-        },
-        {
-          "transform": [
             {
-              "aggregate": [
-                {
-                  "op": "q1",
-                  "field": "Annual_growth_pct",
-                  "as": "Q1"
+              "mark": {
+                "type": "rule",
+                "color": "#16716b",
+                "strokeWidth": 2
+              },
+              "encoding": {
+                "x": {
+                  "field": "Q1",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": [
+                      -9,
+                      14
+                    ]
+                  },
+                  "axis": {
+                    "title": "Annual change in vehicle kilometres (%)",
+                    "labelExpr": "format(datum.value, '.2f') + '%'",
+                    "grid": false
+                  }
                 },
-                {
-                  "op": "q3",
-                  "field": "Annual_growth_pct",
-                  "as": "Q3"
+                "x2": {
+                  "field": "Q3"
                 },
-                {
-                  "op": "median",
-                  "field": "Annual_growth_pct",
-                  "as": "Median"
+                "y": {
+                  "value": 191
                 }
-              ]
+              }
             },
             {
-              "calculate": "'Typical growth (median): ' + format(datum.Median, '.1f') + '%'",
-              "as": "Median_label"
-            },
-            {
-              "calculate": "'Half the years: ' + format(datum.Q1, '.1f') + '% to ' + format(datum.Q3, '.1f') + '%'",
-              "as": "Range_label"
-            },
-            {
-              "calculate": "(datum.Q1 + datum.Q3) / 2",
-              "as": "Mid"
+              "mark": {
+                "type": "text",
+                "fontSize": 11,
+                "color": "#16716b"
+              },
+              "encoding": {
+                "x": {
+                  "value": 165
+                },
+                "y": {
+                  "value": 209
+                },
+                "text": {
+                  "field": "Range_label"
+                }
+              }
             }
-          ],
-          "mark": {
-            "type": "text",
-            "font": "Segoe UI",
-            "fontSize": 11,
-            "color": "#16716b"
-          },
-          "encoding": {
-            "x": {
-              "value": 165
-            },
-            "y": {
-              "value": 209
-            },
-            "text": {
-              "field": "Range_label"
-            }
-          }
+          ]
         },
         {
           "mark": {
@@ -630,21 +475,6 @@
             "color": "#245a81"
           },
           "encoding": {
-            "x": {
-              "field": "Annual_growth_pct",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
-                ]
-              },
-              "axis": {
-                "title": "Annual change in vehicle kilometres (%)",
-                "labelExpr": "datum.value + '%'",
-                "grid": false
-              }
-            },
             "y": {
               "value": 243
             },
@@ -678,89 +508,68 @@
               "filter": "Year_focus === datum['Financial year'] || (Year_hover['Financial year'] && indexof(Year_hover['Financial year'], datum['Financial year']) >= 0)"
             },
             {
-              "calculate": "datum['Financial year'] + ': ' + (datum.Annual_growth_pct < 0 ? 'fell ' : 'grew ') + format(abs(datum.Annual_growth_pct), '.1f') + '%'",
+              "calculate": "datum['Financial year'] + ': ' + (datum.Annual_growth_pct < 0 ? 'fell ' : 'grew ') + format(abs(datum.Annual_growth_pct), '.2f') + '%'",
               "as": "Year_label"
             }
           ],
-          "mark": {
-            "type": "point",
-            "filled": true,
-            "size": 100,
-            "color": "#d97732",
-            "stroke": "white",
-            "strokeWidth": 1
-          },
-          "encoding": {
-            "x": {
-              "field": "Annual_growth_pct",
-              "type": "quantitative",
-              "scale": {
-                "domain": [
-                  -9,
-                  14
+          "layer": [
+            {
+              "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 100,
+                "color": "#d97732",
+                "stroke": "white",
+                "strokeWidth": 1
+              },
+              "encoding": {
+                "y": {
+                  "value": 243
+                },
+                "tooltip": [
+                  {
+                    "field": "State",
+                    "type": "nominal"
+                  },
+                  {
+                    "field": "Financial year",
+                    "type": "ordinal"
+                  },
+                  {
+                    "field": "Travel",
+                    "type": "quantitative",
+                    "title": "Billion vehicle km",
+                    "format": ".2f"
+                  },
+                  {
+                    "field": "Annual_growth_pct",
+                    "type": "quantitative",
+                    "title": "Annual growth (%)",
+                    "format": ".2f"
+                  }
                 ]
-              },
-              "axis": {
-                "title": "Annual change in vehicle kilometres (%)",
-                "labelExpr": "datum.value + '%'",
-                "grid": false
               }
             },
-            "y": {
-              "value": 243
-            },
-            "tooltip": [
-              {
-                "field": "State",
-                "type": "nominal"
+            {
+              "mark": {
+                "type": "text",
+                "fontSize": 12,
+                "fontWeight": "bold",
+                "color": "#a6531b"
               },
-              {
-                "field": "Financial year",
-                "type": "ordinal"
-              },
-              {
-                "field": "Travel",
-                "type": "quantitative",
-                "title": "Billion vehicle km",
-                "format": ".2f"
-              },
-              {
-                "field": "Annual_growth_pct",
-                "type": "quantitative",
-                "title": "Annual growth (%)",
-                "format": ".2f"
+              "encoding": {
+                "x": {
+                  "value": 165
+                },
+                "y": {
+                  "value": 276
+                },
+                "text": {
+                  "field": "Year_label"
+                }
               }
-            ]
-          }
-        },
-        {
-          "transform": [
-            {
-              "filter": "Year_focus === datum['Financial year'] || (Year_hover['Financial year'] && indexof(Year_hover['Financial year'], datum['Financial year']) >= 0)"
-            },
-            {
-              "calculate": "datum['Financial year'] + ': ' + (datum.Annual_growth_pct < 0 ? 'fell ' : 'grew ') + format(abs(datum.Annual_growth_pct), '.1f') + '%'",
-              "as": "Year_label"
             }
-          ],
-          "mark": {
-            "type": "text",
-            "font": "Segoe UI",
-            "fontSize": 12,
-            "fontWeight": "bold",
-            "color": "#a6531b"
-          },
-          "encoding": {
-            "x": {
-              "value": 165
-            },
-            "y": {
-              "value": 276
-            },
-            "text": {
-              "field": "Year_label"
-            }
-          }
+          ]
         },
         {
           "data": {
@@ -772,7 +581,6 @@
           },
           "mark": {
             "type": "text",
-            "font": "Segoe UI",
             "fontSize": 10,
             "color": "#536570",
             "align": "left"
@@ -795,9 +603,24 @@
         "stroke": "#dce3df",
         "strokeWidth": 1,
         "cornerRadius": 12
+      },
+      "encoding": {
+        "x": {
+          "field": "Annual_growth_pct",
+          "type": "quantitative",
+          "scale": {
+            "domain": [-9,14]
+          },
+          "axis": {
+            "title": "Annual change in vehicle kilometres (%)",
+            "labelExpr": "format(datum.value, '.2f') + '%'",
+            "grid": false
+          }
+        }
       }
     }
   ],
-  "align": "all",
-  "center": false
+  "config": {
+    "numberFormat": ".2f"
+  }
 }

@@ -2,14 +2,12 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 380,
   "height": 400,
-
   "data": {
     "url": "../data/state_commuting.csv",
     "format": {
       "type": "csv"
     }
   },
-
   "transform": [
     {
       "fold": [
@@ -22,7 +20,10 @@
         "Northern Territory",
         "Australian Capital Territory"
       ],
-      "as": ["State", "People"]
+      "as": [
+        "State",
+        "People"
+      ]
     },
     {
       "calculate": "datum.People == null || datum.People === '' ? null : toNumber(datum.People)",
@@ -40,7 +41,9 @@
           "as": "Employed_total"
         }
       ],
-      "groupby": ["State"]
+      "groupby": [
+        "State"
+      ]
     },
     {
       "filter": "indexof(['Total', 'Worked at home', 'Did not go to work', 'Not stated'], datum.Vehicles) < 0"
@@ -53,13 +56,234 @@
       "as": "Mode_share"
     }
   ],
-
-  "mark": {
-    "type": "rect",
-    "stroke": "white",
-    "strokeWidth": 1
-  },
-
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "field": "Mode_share",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "scheme": "yellowgreenblue",
+            "zero": true
+          },
+          "legend": {
+            "title": "Share of employed people",
+            "format": ".1%",
+            "values": [
+              0,
+              0.01,
+              0.05,
+              0.1,
+              0.3,
+              0.6
+            ],
+            "gradientLength": 240,
+            "titleLimit": 220,
+            "orient": "bottom",
+            "direction": "horizontal"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "State",
+            "type": "nominal",
+            "title": "State / territory"
+          },
+          {
+            "field": "Vehicles",
+            "type": "nominal",
+            "title": "Travel method"
+          },
+          {
+            "field": "People_count",
+            "type": "quantitative",
+            "title": "People",
+            "format": ",.0f"
+          },
+          {
+            "field": "Employed_total",
+            "type": "quantitative",
+            "title": "All employed people",
+            "format": ",.0f"
+          },
+          {
+            "field": "Mode_share",
+            "type": "quantitative",
+            "title": "Share of employed people",
+            "format": ".2%"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.State === 'Tasmania' && datum.Vehicles === 'Car, as driver'"
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "fillOpacity": 0,
+        "stroke": "red",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.State === 'Northern Territory' && datum.Vehicles === 'Walked only'"
+        }
+      ],
+      "mark": {
+        "type": "rect",
+        "fillOpacity": 0,
+        "stroke": "brown",
+        "strokeWidth": 2
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "count",
+              "as": "Rows"
+            }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "align": "left",
+        "baseline": "top",
+        "color": "black"
+      },
+      "encoding": {
+        "x": {
+          "value": 398
+        },
+        "y": {
+          "value": 0
+        },
+        "text": {
+          "value": [
+            "Driving leads in every",
+            "state and territory"
+          ]
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "count",
+              "as": "Rows"
+            }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "normal",
+        "align": "left",
+        "baseline": "top",
+        "color": "brown"
+      },
+      "encoding": {
+        "x": {
+          "value": 398
+        },
+        "y": {
+          "value": 38
+        },
+        "text": {
+          "value": [
+            "43.4% in NSW, compared",
+            "with 64.6% in Tasmania."
+          ]
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "count",
+              "as": "Rows"
+            }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "fontWeight": "bold",
+        "align": "left",
+        "baseline": "top",
+        "color": "black"
+      },
+      "encoding": {
+        "x": {
+          "value": 398
+        },
+        "y": {
+          "value": 325.33
+        },
+        "text": {
+          "value": [
+            "Walking stands out in",
+            "the Northern Territory"
+          ]
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "count",
+              "as": "Rows"
+            }
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "normal",
+        "align": "left",
+        "baseline": "top",
+        "color": "brown"
+      },
+      "encoding": {
+        "x": {
+          "value": 398
+        },
+        "y": {
+          "value": 363.33
+        },
+        "text": {
+          "value": [
+            "7.6% walked to work -",
+            "the highest proportion."
+          ]
+        }
+      }
+    }
+  ],
   "encoding": {
     "x": {
       "field": "State",
@@ -81,7 +305,6 @@
         "labelFontSize": 12
       }
     },
-
     "y": {
       "field": "Vehicles",
       "type": "nominal",
@@ -104,61 +327,6 @@
         "labelLimit": 220,
         "labelFontSize": 12
       }
-    },
-
-    "color": {
-      "field": "Mode_share",
-      "type": "quantitative",
-      "scale": {
-        "type": "sqrt",
-        "scheme": "yellowgreenblue",
-        "zero": true
-      },
-      "legend": {
-        "title": "Share of employed people",
-        "format": ".1%",
-        "values": [
-          0,
-          0.01,
-          0.05,
-          0.10,
-          0.30,
-          0.60
-        ],
-        "gradientLength": 250,
-        "titleLimit": 220
-      }
-    },
-
-    "tooltip": [
-      {
-        "field": "State",
-        "type": "nominal",
-        "title": "State / territory"
-      },
-      {
-        "field": "Vehicles",
-        "type": "nominal",
-        "title": "Travel method"
-      },
-      {
-        "field": "People_count",
-        "type": "quantitative",
-        "title": "People",
-        "format": ",.0f"
-      },
-      {
-        "field": "Employed_total",
-        "type": "quantitative",
-        "title": "All employed people",
-        "format": ",.0f"
-      },
-      {
-        "field": "Mode_share",
-        "type": "quantitative",
-        "title": "Share of employed people",
-        "format": ".2%"
-      }
-    ]
+    }
   }
 }
