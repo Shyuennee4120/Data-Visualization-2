@@ -59,21 +59,21 @@ a {
 
 h1 {
   font-size: clamp(34px, 5vw, 60px);
-  font-family: var(--font-heading);
+  font-family: Georgia, "Times New Roman", serif;
   line-height: 1.1;
   letter-spacing: -.04em;
   margin: 14px 0;
 }
 
 .hero-subtitle {
-  font-size: 21px;
+  font-size: 24px;
   margin: 0 0 20px;
   color: var(--muted);
   text-align: center;
 }
 
 .overview {
-  font-size: 18px;
+  font-size: 17px;
   text-align: center;
 }
 
@@ -117,7 +117,7 @@ h1 {
 
 .section-number {
   color: var(--accent);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 700;
   padding-top: 8px;
 }
@@ -229,10 +229,10 @@ figcaption {
 }
 
 .finding-placeholder {
-  padding-top: 16px;
+  padding-top: 12px;
   border-top: 1px dashed var(--line);
   color: var(--muted);
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .closing {
@@ -243,7 +243,7 @@ figcaption {
 }
 
 .closing h2 {
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .method-notes {
@@ -370,4 +370,13 @@ a:focus-visible {
 .chart-card--growth .chart-story {
   padding-top: 0;
   max-width: 750px;
+}
+
+
+/* Keep the waffle reminder close to its chart, independent of story height. */
+.chart-card--waffle .chart-column .chart-reminder {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }

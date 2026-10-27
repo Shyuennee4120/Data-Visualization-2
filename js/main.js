@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         await vegaEmbed(container, specification, {
           actions: false, // disable the three dots button
-          renderer: number === 7 ? "svg" : "canvas"
+          renderer: [3, 5, 7].includes(number) ? "svg" : "canvas"
         });
       } catch (error) {
         showChartMessage(container, file, error);

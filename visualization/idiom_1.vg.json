@@ -24,8 +24,8 @@
   ],
   "vconcat": [
     {
-      "width": 550,
-      "height": 300,
+      "width": 600,
+      "height": 350,
       "mark": {
         "type": "line",
         "tooltip": true
@@ -82,15 +82,15 @@
       }
     },
     {
-      "width": 550,
-      "height": 65,
+      "width": 600,
+      "height": 80,
       "title": {
         "text": "(Drag across the overview to select years)",
         "anchor": "start",
         "fontSize": 11,
         "fontWeight": "normal",
         "subtitleFontSize": 10,
-        "color": "grey"
+        "color": "steelblue"
       },
       "params": [
         {

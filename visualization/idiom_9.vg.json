@@ -170,7 +170,7 @@
           "type": "nominal",
           "scale": {
             "domain": ["Males", "Females"],
-            "range": ["#2878b5", "#d97732"]
+            "range": ["#2986cc", "#c90076"]
           },
           "legend": {
             "title": "Sex",

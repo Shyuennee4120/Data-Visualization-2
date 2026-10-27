@@ -2,11 +2,9 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 560,
   "height": 300,
-
   "data": {
     "url": "../data/vehicle_travel_by_type.csv"
   },
-
   "transform": [
     {
       "fold": [
@@ -17,13 +15,13 @@
         "Rigid and other trucks",
         "Articulated trucks"
       ],
-      "as": ["Vehicle_type", "Vehicle_km"]
+      "as": [
+        "Vehicle_type",
+        "Vehicle_km"
+      ]
     }
   ],
-
   "mark": "area",
-  
-
   "encoding": {
     "x": {
       "field": "Financial year",
@@ -39,33 +37,34 @@
       "field": "Vehicle_km",
       "type": "quantitative",
       "stack": "center",
-      "title": "Billion vehicle kilometers"
+      "title": null,
+      "axis": null
     },
     "color": {
-    "field": "Vehicle_type",
-    "type": "nominal",
-    "scale": {
-      "domain": [
-        "Passenger cars",
-        "Motor cycles",
-        "Buses",
-        "Light commercial vehicles",
-        "Rigid and other trucks",
-        "Articulated trucks"
-      ],
-      "range": [
-        "#DE7272",
-        "#7B4019",
-        "#15370D",
-        "#FFCA88",
-        "#80426E",
-        "#FB6C00"
-      ]
-    },
+      "field": "Vehicle_type",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Passenger cars",
+          "Motor cycles",
+          "Buses",
+          "Light commercial vehicles",
+          "Rigid and other trucks",
+          "Articulated trucks"
+        ],
+        "range": [
+          "#DE7272",
+          "#7B4019",
+          "#15370D",
+          "#FFCA88",
+          "#80426E",
+          "#FB6C00"
+        ]
+      },
       "legend": {
         "title": "Vehicle type",
         "orient": "bottom"
-  }
+      }
     },
     "tooltip": [
       {
