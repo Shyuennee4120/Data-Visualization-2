@@ -46,6 +46,7 @@ a {
   padding: 72px 0 38px;
   border-bottom: 1px solid var(--line);
   text-align: center;
+  background-color:#bccac3;
 }
 
 .eyebrow {
@@ -104,7 +105,7 @@ h1 {
 }
 
 .story-section {
-  padding: 50px 0 8px;
+  padding: 40px 0 8px;
   scroll-margin-top: 20px;
 }
 
@@ -310,7 +311,7 @@ a:focus-visible {
 .chart-story-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 32px;
+  gap: 26px;
   align-items: start;
 }
 

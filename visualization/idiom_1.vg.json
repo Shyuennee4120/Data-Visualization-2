@@ -24,7 +24,7 @@
   ],
   "vconcat": [
     {
-      "width": 450,
+      "width": 550,
       "height": 300,
       "mark": {
         "type": "line",
@@ -82,7 +82,7 @@
       }
     },
     {
-      "width": 450,
+      "width": 550,
       "height": 65,
       "title": {
         "text": "(Drag across the overview to select years)",

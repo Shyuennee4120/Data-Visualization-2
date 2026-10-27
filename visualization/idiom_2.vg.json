@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 500,
+  "width": 560,
   "height": 300,
 
   "data": {
@@ -54,12 +54,12 @@
         "Articulated trucks"
       ],
       "range": [
-        "pink",
-        "steelblue",
-        "orange",
-        "lightgreen",
-        "brown",
-        "purple"
+        "#DE7272",
+        "#7B4019",
+        "#15370D",
+        "#FFCA88",
+        "#80426E",
+        "#FB6C00"
       ]
     },
       "legend": {
